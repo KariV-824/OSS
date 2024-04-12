@@ -13,9 +13,12 @@ Selected Opensource SW : **Battleship (Text-Based Game)** <br>
 Language : C <br>
 Original github repository : [oscarpobletes/Battleship](https://github.com/oscarpobletes/BattleShip) <br>
 ## Improvements
-- [ ] 개선사항1
-- [ ] 개선사항2
-- [ ] 개선사항3
-- [ ] 개선사항4
-- [ ] 개선사항5
-- [ ] 개선사항6
+- [ ] 멀티플레이 추가
+- [ ] UI 추가
+- [ ] 배 랜덤 배치
+- [ ] 배 규격 추가, 내구도(체력)시스템 구현
+- [ ] 난이도 세팅에 따라 보드 규격 및 배 갯수 증가
+- [ ] 각종 이펙트 추가 (색상, 효과음)
+- [ ] 소요시간 시스템 추가
+- [ ] (미정) 랭킹 시스템 - 메모장 활용. 파일 입출력 활용해서
+- [ ] Clean Code 정리
