@@ -10,8 +10,8 @@
 
 ## Introduction
 Selected Opensource SW : Battleship (Text-Based Game) <br>
-Language : C
-Original github repository : https://github.com/oscarpobletes/BattleShip
+Language : C <br>
+Original github repository : [oscarpobletes/Battleship](https://github.com/oscarpobletes/BattleShip) <br>
 ## Improvements
 - [ ] 개선사항1
 - [ ] 개선사항2
