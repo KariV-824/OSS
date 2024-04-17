@@ -20,5 +20,5 @@ Original github repository : [oscarpobletes/Battleship](https://github.com/oscar
 - [ ] 난이도 세팅에 따라 보드 규격 및 배 갯수 증가
 - [ ] 각종 이펙트 추가 (색상, 효과음)
 - [ ] 소요시간 시스템 추가
-- [ ] (미정) 랭킹 시스템 - 메모장 활용. 파일 입출력 활용해서
+- [ ] 랭킹 시스템
 - [ ] Clean Code 정리
