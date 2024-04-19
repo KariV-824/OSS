@@ -9,7 +9,7 @@
 >2019125005 길태영 <br>
 
 ## Introduction
-Selected Opensource SW : **Battleship (Text-Based Game)** <br>
+Selected Opensource SW : **Battleship! (Text-Based Game)** <br>
 Language : C <br>
 Original github repository : [oscarpobletes/Battleship](https://github.com/oscarpobletes/BattleShip) <br>
 ## Improvements
