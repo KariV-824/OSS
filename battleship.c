@@ -1,8 +1,20 @@
 //by Óscar Poblete Sáenz
-#include <stdio.h>
 
+#include <stdio.h>
+#include <Windows.h>
+#include <mmsystem.h>
+#pragma comment (lib, "winmm.lib")
 #define BOARD_SIZE 5 // Define the size of the game board
 #define SHIPS_COUNT 4 // Define the number of ships in the game
+
+#define _C 1046.502
+#define _D 1108.731
+#define _E 1318.510
+#define _F 1396.913
+#define _G 1567.982
+#define _A 1760.000
+#define _B 1975.533
+
 
 void initializeBoard(char board[][BOARD_SIZE]) {
     int i, j;
@@ -64,6 +76,7 @@ int hasWon(char board[][BOARD_SIZE]) {
     return 1;  // All ships have been sunk
 }
 
+
 int main() {
     char board[BOARD_SIZE][BOARD_SIZE];
     int guessRow, guessCol;
@@ -75,6 +88,8 @@ int main() {
     printf("=== Battleship Game ===\n");
     printf("Guess the location of the ships on the board.\n");
     printf("Enter row and column numbers between 0 and 4.\n");
+
+
 
     while (!hasWon(board)) {
         printf("\n");
@@ -90,9 +105,11 @@ int main() {
 
         if (board[guessRow][guessCol] == 'S') {
             printf("Congratulations! You hit a ship!\n");
+            Beep(_B,100);
             board[guessRow][guessCol] = 'X';  // 'X' represents a hit
         } else if (board[guessRow][guessCol] == '~') {
             printf("Missed! Try again.\n");
+            Beep(_F,100);
             board[guessRow][guessCol] = 'O';  // 'O' represents a miss
         } else {
             printf("You've already guessed this location. Try again.\n");
@@ -106,4 +123,5 @@ int main() {
     printf("Congratulations! You sunk all the ships in %d attempts.\n", attempts);
 
     return 0;
+    
 }
