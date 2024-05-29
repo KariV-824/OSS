@@ -52,27 +52,42 @@ void printBoard(char board[][BOARD_SIZE]) {
 }
 
 // 전함을 보드에 배치하는 함수
-void placeShips(char board[][BOARD_SIZE]) {
+void placeShips(char board[][BOARD_SIZE]) { // 숨길 배의 위치를 입력받는 함수
     int i;
-    for (i = 0; i < SHIPS_COUNT; i++) { //현재는 4개를 입력받음
-        int row, col;  //행,열 
-        printf("Enter the coordinates of the battleship%d (row col): ", i + 1);
-        scanf("%d %d", &row, &col); // 행, 열 입력 받음음
-
-        if (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) { //보드 사이즈 안에 있는 행과 열이면면
-            if (board[row][col] != '~') { //이미 전함이 있으면 
-                printf("There is already a battleship at that location. Please enter again.\n");
-                i--;
-            } else { 
-                board[row][col] = 'S';  // 'S'는 전함을 나타냄
+    for(i = 0; i < SHIPS_COUNT; i++) {
+        int row, col;
+        printf("Enter the coordinates for Ship %d(row column): ", i + 1);
+        int result = scanf("%d %d", &row, &col); // 2개의 정수를 입력받음
+        if(result == 2) { // 2개의 정수가 입력되었을때만 실행
+            char check = getchar(); // 입력 버퍼에서 다음 문자를 읽음, 입력의 끝을 확인하기 위함
+            if(check != '\n') { // 읽은 문자가 개행 문자('\n')가 아니라면, 즉 추가 입력이 있다면
+                printf("Too many inputs. Only enter two numbers. Try again.\n");
+                while(getchar() != '\n'); // 입력 버퍼를 비워 더 이상 읽을 문자가 없을 때까지 반복  
+                i--; // i를 감소시켜 입력을 다시 받도록 함
+                continue; // 다음 반복으로 넘어가지 않고 현재 반복을 재시작
             }
-        } else {  // 보드 사이즈를 넘어서면 
-            printf("Invalid coordinates. Please enter again.\n");
-            i--;
+            
+            if(row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
+                if(board[row][col] != '~') {
+                    printf("There is already a ship at that location. Try again.\n");
+                    i--; // 잘못된 위치 입력 시 다시 입력
+                } 
+                else{
+                    board[row][col] = 'S';
+                }
+            } 
+            else{
+                printf("Invalid coordinates. Try again.\n");
+                i--; // 범위 밖 좌표 입력 시 다시 입력
+            }
+        } 
+        else{ // 입력받은 데이터가 2개의 정수가 아니면
+            printf("Invalid input. You need to enter two numbers. Try again.\n");
+            while(getchar() != '\n'); // 나머지 잘못된 입력을 모두 버림
+            i--; // i를 감소시켜 입력을 다시 받도록 함
         }
     }
 }
-
 // 유효한 추측인지 확인하는 함수
 int isValidGuess(int row, int col) {
     return (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE);  //보드 사이즈 안에있으면 T리턴 아니면 F리턴
