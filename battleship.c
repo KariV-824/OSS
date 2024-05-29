@@ -12,6 +12,7 @@ typedef struct {
 
 
 void singleplay();
+
 void multplay();
 void gamemode();
 void initializeBoard(char board[][BOARD_SIZE]);
