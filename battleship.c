@@ -15,7 +15,21 @@
 #define _A 1760.000
 #define _B 1975.533
 
+int attempts = 0;
 
+void printHeadUI()
+{
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    printf("@        BATTLESHIP        @\n");
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+}
+void printtailUI(int attempts)
+{
+    printf("\033[0;37m");
+    printf("@ @ @ @ @ @ @ @ @ @\n");
+    printf("@  attempts : %d  @\n",attempts);
+    printf("@ @ @ @ @ @ @ @ @ @\n");
+}
 void initializeBoard(char board[][BOARD_SIZE]) {
     int i, j;
     for (i = 0; i < BOARD_SIZE; i++) {
@@ -27,16 +41,33 @@ void initializeBoard(char board[][BOARD_SIZE]) {
 
 void printBoard(char board[][BOARD_SIZE]) {
     int i, j;
+    printHeadUI();
     for (i = 0; i < BOARD_SIZE; i++) {
         for (j = 0; j < BOARD_SIZE; j++) {
-            if (board[i][j] == '~' || board[i][j] == 'X' || board[i][j] == 'O') {
+            if (board[i][j] == '~')  
+            {
+                printf("\033[0;34m");
                 printf("%c ", board[i][j]);
-            } else {
+            }
+            else if (board[i][j] == 'X')
+            {
+                printf("\033[0;31m");
+                printf("%c ", board[i][j]);
+            }
+            else if (board[i][j] == 'O')
+            {
+                printf("\033[0;36m");
+                printf("%c ", board[i][j]);
+            }
+            
+            else {
+                printf("\033[0;34m");
                 printf("~ ");  // Hide ship locations with '~'
             }
         }
         printf("\n");
     }
+    printtailUI(attempts);
 }
 
 void placeShips(char board[][BOARD_SIZE]) {
@@ -77,10 +108,11 @@ int hasWon(char board[][BOARD_SIZE]) {
 }
 
 
+
 int main() {
     char board[BOARD_SIZE][BOARD_SIZE];
     int guessRow, guessCol;
-    int attempts = 0;
+
 
     initializeBoard(board);
     placeShips(board);
