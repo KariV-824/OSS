@@ -80,13 +80,19 @@ int main() {
     if (difficulty == 'h') {
         boardSize = HARD_BOARD_SIZE;
         shipsCount = HARD_SHIPS_COUNT;
-    } else {
+    } 
+    else if (difficulty == 'e') {
         boardSize = EASY_BOARD_SIZE;
         shipsCount = EASY_SHIPS_COUNT;
     }
+    else {
+        printf("wrong input value!");
+        exit(1);
+    }
+
 
     // 보드 배열 선언 및 초기화
-    char board[HARD_BOARD_SIZE][HARD_BOARD_SIZE];
+    char board[boardSize][boardSize];
     initializeBoard(board, boardSize);
     placeShips(board, boardSize, shipsCount);
 
@@ -100,7 +106,7 @@ int main() {
 
         int guessRow, guessCol;
         printf("Enter your guess (row column): ");
-        scanf("%d %d", &guessRow, &guessent
+        scanf("%d %d", &guessRow, &guessCol);
 
         // 추측이 유효한지 확인
         if (!isValidGuess(guessRow, guessCol, boardSize)) {
@@ -118,7 +124,7 @@ int main() {
         } else if (board[guessRow][guessCol] == '~') {
             printf("Missed! Try again.\n");
             board[guessRow][guessCol] = 'O';  // 빗나감을 'O'로 표시
-        } else if (board[guessRow][guessCol] == 'O' || board[guess_Row][guessCol] == 'X') {
+        } else if (board[guessRow][guessCol] == 'O' || board[guessRow][guessCol] == 'X') {
             printf("You've already guessed this location. Try again.\n");  // 이미 추측한 위치는 경고 메시지 출력
         }
     }
