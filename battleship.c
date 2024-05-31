@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h> // 시간 관련 함수들을 사용하기 위한 라이브러리
 #define BOARD_SIZE 5 // 게임 보드의 크기 정의
 #define SHIPS_COUNT 4 // 게임의 전함 수 정의
 
@@ -37,6 +38,7 @@ void singleplay(){
     int guessRow, guessCol;
     int attempts = 0;
     int a=0;
+    time_t start, end; // 시간 측정을 위한 변수
      // 게임 보드를 초기화하고 전함을 배치함
     initializeBoard(board); //초기화화
     placeShips(board); //배치  -> 랜덤 배치 들어오면 추가해줌.
@@ -45,6 +47,7 @@ void singleplay(){
     printf("=== Battleship Game ===\n");
     printf("Guess the location of the battleship on the board.\n");
     printf("Enter row and col numbers from 0 to 4.\n");
+    time(&start); // 게임 시작 시간 기록
 
     // 게임 루프
     while (!hasWon(board)) {  //보드에 전함이 남아있으면
@@ -76,10 +79,13 @@ void singleplay(){
         attempts++; //시도 횟수 증가
     }
 
+    time(&end); // 게임 종료 시간 기록
+    double time_taken = difftime(end, start); // 걸린 시간 계산
     // 게임 종료, 최종 보드 상태와 시도 횟수 출력
     printf("\n");
     printBoard(board);
     printf("congratulations! All battleships have been shot down. attempts: %d\n", attempts);
+    printf("Time taken: %.2f seconds\n", time_taken); // 총 소요 시간 출력
     
     rank_input(attempts);
     printf("Would you like to check the ranking table? 1: O else: X ");
