@@ -238,11 +238,12 @@ void placeShips(char board[][BOARD_SIZE]) {
         int result = scanf("%d %d", &row, &col); // 2개의 정수를 입력받아서 result에 저장
         if(result == 2) { // 2개의 정수가 입력되었을때만 실행
             if(getchar() != '\n') { // 2개의 정수 이후에 추가 문자가 버퍼에 남아있다면
-                printf("Too many inputs. Only enter two numbers. Try again.\n");
-                while(getchar() != '\n'); // 버퍼에 남은 모든 문자를 버리며 '\n'를 만날 때까지 반복
+                printf("Too many inputs. Only enter two numbers. Try again.\n"); 
+                while(getchar() != '\n'); // 버퍼에 남은 모든 문자를 버리며 '\n'를 만날 때까지 반복  
                 i--; // i를 감소시켜 이번 입력을 무효화하고, 입력을 다시 받도록 함
                 continue; // for 루프의 처음으로 돌아가 재시작
             }
+            
             if(row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
                 if(board[row][col] != '~') {
                     printf("There is already a ship at that location. Try again.\n");
