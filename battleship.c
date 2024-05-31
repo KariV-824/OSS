@@ -266,7 +266,8 @@ int isValidGuess(int row, int col) {
 
 // 모든 전함이 격추되었는지 확인하는 함수
 int hasWon(char board[][BOARD_SIZE]) {
-    int i, j;    for (i = 0; i < BOARD_SIZE; i++) {
+    int i, j;
+    for (i = 0; i < BOARD_SIZE; i++) {
         for (j = 0; j < BOARD_SIZE; j++) {
             if (board[i][j] == 'S') {  
                 return 0;  // 아직 격추되지 않은 전함이 하나 이상 남아있음
