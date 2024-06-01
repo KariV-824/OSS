@@ -13,13 +13,14 @@ typedef struct {
     char name[50];
     int score;
 } Player;
+
 int boardSize = 0;
 int shipsCount = 0;
 
 void processGuess(char board[][boardSize], int boardSize, int player);
 void selectDifficulty(int* boardSize, int* shipsCount);
 void singleplay(int boardSize, int shipsCount);
-void multplay();
+void multplay(int boardSize, int shipsCount);
 void gamemode();
 void initializeBoard(char board[][boardSize], int boardSize);
 void printBoard(char board[][boardSize], int boardSize);
@@ -82,15 +83,15 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     }
 }
 
-void singleplay(){
-     char board[BOARD_SIZE][BOARD_SIZE];
+void singleplay(int boardSize, int shipsCount){
+    char board[boardSize][boardSize];
     int guessRow, guessCol;
     int attempts = 0;
     int a=0;
     time_t start, end; // 시간 측정을 위한 변수
      // 게임 보드를 초기화하고 전함을 배치함
-    initializeBoard(board); //초기화화
-    placeShips(board); //배치  -> 랜덤 배치 들어오면 추가해줌.
+    initializeBoard(board, boardSize); //초기화화
+    placeShips(board,boardSize,shipsCount); //배치  -> 랜덤 배치 들어오면 추가해줌.
 
 
     // 게임 설명 출력
@@ -101,10 +102,10 @@ void singleplay(){
     time(&start); // 게임 시작 시간 기록
     // 게임 루프
     while (!hasWon(board, boardSize)) {  //보드에 전함이 남아있으면
-        processGuess(board, boardSize, player);
+        processGuess(board, boardSize, 0);
         attempts++; //시도 횟수 증가
     }
-  
+
     time(&end); // 게임 종료 시간 기록
     double time_taken = difftime(end, start); // 걸린 시간 계산
 
@@ -117,15 +118,16 @@ void singleplay(){
     rank_input(attempts);
     printf("Would you like to check the ranking table? 1: O else: X ");
     scanf("%d",&a);
-    if(a==1){
+    if(a==1)
+    {
         showRanking();
     }
     else{
         return;
     } 
-
 }
-void multplay(){
+
+void multplay(int boardSize, int shipsCount){
 
     char board1[boardSize][boardSize]; //1플레이어 보드
     char board2[boardSize][boardSize]; //2플레이어 보드 
@@ -213,7 +215,7 @@ void gamemode(){
     }
     
 }
- 
+
 // 보드를 빈 칸으로 초기화하는 함수
 
 void initializeBoard(char board[][boardSize],int boardSize) { // 모두 '~'로 출력함함
