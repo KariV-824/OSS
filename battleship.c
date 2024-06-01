@@ -1,13 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <Windows.h>
+#include <mmsystem.h>
 #include <string.h>
 #include <time.h> // 시간 관련 함수들을 사용하기 위한 라이브러리
+#pragma comment (lib, "winmm.lib")
 
 #define EASY_BOARD_SIZE 5   //게임 보드의 크기 정의
 #define EASY_SHIPS_COUNT 4  //게임의 전함 수 정의
 #define HARD_BOARD_SIZE 6
 #define HARD_SHIPS_COUNT 7
 
+#define _C 1046.502
+#define _D 1108.731
+#define _E 1318.510
+#define _F 1396.913
+#define _G 1567.982
+#define _A 1760.000
+#define _B 1975.533
 // 플레이어 정보 구조체 정의
 typedef struct {
     char name[50];
@@ -16,6 +26,7 @@ typedef struct {
 
 int boardSize = 0;
 int shipsCount = 0;
+int attempts = 0;
 
 void processGuess(char board[][boardSize], int boardSize, int player);
 void selectDifficulty(int* boardSize, int* shipsCount);
@@ -40,9 +51,26 @@ int main() {
     return 0;
 }
 
+void printHeadUI()
+{
+    printf("\033[0;37m");
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    printf("@        BATTLESHIP        @\n");
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+}
+void printtailUI(int attempts)
+{
+    printf("\033[0;37m");
+    printf("@ @ @ @ @ @ @ @ @ @ @\n");
+    printf("@   attempts : %d   @\n",attempts);
+    printf("@ @ @ @ @ @ @ @ @ @ @\n");
+}
+
+
 void processGuess(char board[][boardSize], int boardSize, int player) {
     int guessRow, guessCol;
     printBoard(board, boardSize);
+    printtailUI(attempts);
     printf("Player %d, enter your guess (row column): ", player);
     while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize)) {
         while (getchar() != '\n');
@@ -51,12 +79,15 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
 
     if (board[guessRow][guessCol] == 'S') {
         printf("Player %d hit a ship!\n", player);
+        Beep(_B,100);
         board[guessRow][guessCol] = 'H';
     } else if (board[guessRow][guessCol] == 'H') {
         printf("Player %d, congratulations! You destroyed a ship!\n", player);
+        Beep(_B,100);
         board[guessRow][guessCol] = 'X';
     } else if (board[guessRow][guessCol] == '~') {
         printf("Player %d missed! Try again.\n", player);
+        Beep(_F,100);
         board[guessRow][guessCol] = 'O';
     } else {
         printf("Player %d, you've already guessed this location. Try again.\n", player);
@@ -83,25 +114,28 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
 
 void singleplay(int boardSize, int shipsCount) {
     char board[boardSize][boardSize];
-    int attempts = 0;
-    int a = 0;
+
+    int guessRow, guessCol;
+    int a=0;
+
     time_t start, end; // 시간 측정을 위한 변수
 
     // 게임 보드를 초기화하고 전함을 배치함
     initializeBoard(board, boardSize); // 초기화
     placeShipsrandom(board, boardSize, shipsCount); // 랜덤 배치
 
-    // 게임 설명 출력
-    printf("=== Battleship Game ===\n");
-    printf("Guess the location of the battleship on the board.\n");
-    printf("Enter row and col numbers from 0 to %d.\n", boardSize - 1);
+
+    printHeadUI();
+
 
     time(&start); // 게임 시작 시간 기록
 
     // 게임 루프
-    while (!hasWon(board, boardSize)) {  // 보드에 전함이 남아있으면
-        processGuess(board, boardSize, 0);
-        attempts++; // 시도 횟수 증가
+
+    while (!hasWon(board, boardSize)) {  //보드에 전함이 남아있으면
+        processGuess(board, boardSize, 1);
+        attempts++; //시도 횟수 증가
+
     }
 
     time(&end); // 게임 종료 시간 기록
@@ -217,10 +251,27 @@ void printBoard(char board[][boardSize], int boardSize) {
     int i, j;
     for (i = 0; i < boardSize; i++) {
         for (j = 0; j < boardSize; j++) {
-            if (board[i][j] == '~' || board[i][j] == 'X' || board[i][j] == 'O') { // 전함은 'S'임 
+
+            if (board[i][j] == '~')  
+            {
+                printf("\033[0;34m");
                 printf("%c ", board[i][j]);
-            } else {
-                printf("~ "); // 전함 위치를 '~'로 감춤 
+            }
+            else if (board[i][j] == 'X')
+            {
+                printf("\033[0;31m");
+                printf("%c ", board[i][j]);
+            }
+            else if (board[i][j] == 'O')
+            {
+                printf("\033[0;36m");
+                printf("%c ", board[i][j]);
+            }
+            
+            else {
+                printf("\033[0;34m");
+                printf("~ ");  // Hide ship locations with '~'
+
             }
         }
         printf("\n");
