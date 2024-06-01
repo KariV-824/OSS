@@ -18,6 +18,7 @@ void gamemode();
 void initializeBoard(char board[][BOARD_SIZE]);
 void printBoard(char board[][BOARD_SIZE]);
 void placeShips(char board[][BOARD_SIZE]);
+void placeShipsrandom(char board[][BOARD_SIZE]);
 int isValidGuess(int row, int col);
 int hasWon(char board[][BOARD_SIZE]);
 void rank_input(int score);
@@ -41,7 +42,7 @@ void singleplay(){
     time_t start, end; // 시간 측정을 위한 변수
      // 게임 보드를 초기화하고 전함을 배치함
     initializeBoard(board); //초기화화
-    placeShips(board); //배치  -> 랜덤 배치 들어오면 추가해줌.
+    placeShipsrandom(board); //배치 
 
     // 게임 설명 출력
     printf("=== Battleship Game ===\n");
@@ -105,12 +106,27 @@ void multplay(){
     int guessRow1, guessCol1;
     int guessRow2, guessCol2;
      // 게임 보드를 초기화하고 전함을 배치함
-   
-    initializeBoard(board1); //초기화화
-    placeShips(board1); //배치  -> 랜덤 배치 들어오면 추가해줌.
-    initializeBoard(board2); //초기화화
-    placeShips(board2);
+    int mode1, mode2; // 각 플레이어의 배치 모드
 
+    // 플레이어 1의 배치 모드 선택
+    printf("Player 1: Choose ship placement mode (1: Manual, 2: Random): ");
+    scanf("%d", &mode1);
+    initializeBoard(board1);
+    if (mode1 == 1) {
+        placeShips(board1);
+    } else {
+        placeShipsrandom(board1);
+    }
+
+    // 플레이어 2의 배치 모드 선택
+    printf("Player 2: Choose ship placement mode (1: Manual, 2: Random): ");
+    scanf("%d", &mode2);
+    initializeBoard(board2);
+    if (mode2 == 1) {
+        placeShips(board2);
+    } else {
+        placeShipsrandom(board2);
+    }
     // 게임 설명 출력
     printf("=== Battleship Game ===\n");
     printf("Guess the location of the battleship on the board.\n");
@@ -248,6 +264,20 @@ void placeShips(char board[][BOARD_SIZE]) {
             printf("Invalid coordinates. Please enter again.\n");
             i--;
         }
+    }
+}
+
+// 전함을 보드에 랜덤으로 배치하는 함수
+void placeShipsrandom(char board[][BOARD_SIZE]) {
+    int i;
+    srand(time(0)); // 시드 설정: rand() 함수를 통한 랜덤 값을 생성하기 위해 현재 시간을 시드로 사용
+    for (i = 0; i < SHIPS_COUNT; i++) {
+        int row, col;
+        do {
+            row = rand() % BOARD_SIZE; // 0부터 BOARD_SIZE-1 사이의 랜덤 행 값 생성
+            col = rand() % BOARD_SIZE; // 0부터 BOARD_SIZE-1 사이의 랜덤 열 값 생성
+        } while (board[row][col] != '~'); // 배가 이미 있는지 확인하고, 빈 자리(~)일 때까지 반복
+        board[row][col] = 'S'; // 배 배치
     }
 }
 
