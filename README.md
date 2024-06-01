@@ -3,7 +3,7 @@
 ## Members (Group : H)
 
 >**2023125026 박찬** <br>
->2023125058 전용민 <br>
+>2021125058 전용민 <br>
 >2021125070 표형돈 <br>
 >2021125048 이원웅 <br>
 >2019125005 길태영 <br>
@@ -12,6 +12,7 @@
 Selected Opensource SW : **Battleship (Text-Based Game)** <br>
 Language : C <br>
 Original github repository : [oscarpobletes/Battleship](https://github.com/oscarpobletes/BattleShip) <br>
+
 ## Improvements
 - [ ] 멀티플레이 추가
 - [ ] UI 추가
@@ -21,4 +22,5 @@ Original github repository : [oscarpobletes/Battleship](https://github.com/oscar
 - [ ] 각종 이펙트 추가 (색상, 효과음)
 - [ ] 소요시간 시스템 추가
 - [ ] 랭킹 시스템
+- [ ] 기존 코드 오류 사항 수정
 - [ ] Clean Code 정리
