@@ -21,7 +21,7 @@
 // 플레이어 정보 구조체 정의
 typedef struct {
     char name[50];
-    int attempt;
+    int score;
 } Player;
 
 int boardSize = 0;
@@ -39,12 +39,11 @@ void placeShips(char board[][boardSize], int boardSize, int shipsCount);
 void placeShipsrandom(char board[][boardSize], int boardSize, int shipsCount);
 int isValidGuess(int row, int col, int boardSize);
 int hasWon(char board[][boardSize], int boardSize);
-void rank_input_E(int attempt);
-void rank_input_H(int attempt);
-int compare_attempt(const void* a, const void* b);
-int read_attempt(Player players[], int max_players);
-void print_sorted_attempt(Player players[], int count);
-void showRanking(int boardSize);
+void rank_input(int score);
+int compare_scores(const void* a, const void* b);
+int read_scores(Player players[], int max_players);
+void print_sorted_scores(Player players[], int count);
+void showRanking();
 
 int main() {
     //게임 모드 설정
@@ -146,17 +145,12 @@ void singleplay(int boardSize, int shipsCount) {
     printf("\n");
     printBoard(board, boardSize);
     printf("congratulations! All battleships have been shot down. attempts: %d\n", attempts);
-    if(boardSize==5){
-        rank_input_E(attempts);
-    }
-    else{
-        rank_input_H(attempts);
-    }
 
+    rank_input(attempts);
     printf("Would you like to check the ranking table? 1: O else: X ");
     scanf("%d", &a);
     if (a == 1) {
-        showRanking(boardSize);
+        showRanking();
     } else {
         return;
     }
@@ -231,10 +225,12 @@ void gamemode() {
     printf("1: SiglePlay 2:MultiPlay ");
     scanf("%d", &n);
 
-    selectDifficulty(&boardSize, &shipsCount);
+    
     if (n == 1) {
+        selectDifficulty(&boardSize, &shipsCount);
         singleplay(boardSize, shipsCount);
     } else if (n == 2) {
+        selectDifficulty(&boardSize, &shipsCount);
         multplay(boardSize, shipsCount);
     } else {
         printf("wrong!\n");
@@ -349,76 +345,36 @@ int hasWon(char board[][boardSize], int boardSize) {
     return 1; // 모든 전함이 격추됨
 }
 
-// Easy 모드 플레이어 정보 입력 함수
-void rank_input_E(int attempt) {
+// 플레이어 정보 입력 함수
+void rank_input(int score) {
     char player_name[50];
 
     printf("Game Over Enter name: ");
     scanf("%s", player_name);
 
     // 메모장 열기
-    FILE* file = fopen("Rank_list_E.txt", "a");
+    FILE* file = fopen("Rank_list.txt", "a");
     if (file == NULL) {
         printf("File open error\n");
         return;
     }
 
     // 이름과 점수 파일에 입력
-    fprintf(file, "Player Name: %s\tattempt: %d\n", player_name, attempt);
-
-    fclose(file);
-}
-
-// Easy 모드 플레이어 정보 파일에서 읽기
-int read_attempt_E(Player players[], int max_players) {
-    FILE* file = fopen("Rank_list_E.txt", "r");
-    if (file == NULL) {
-        printf("File open error\n");
-        return 0;
-    }
-
-    int count = 0;
-    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanf의 반환값이 2이면 2가지 값 모두 잘 가져왔단 의미 
-        count++;
-        if (count >= max_players) {
-            break;
-        }
-    }
-
-    fclose(file);
-    return count;
-}
-
-// Hard 모드 플레이어 정보 입력 함수
-void rank_input_H(int attempt) {
-    char player_name[50];
-
-    printf("Game Over Enter name: ");
-    scanf("%s", player_name);
-
-    // 메모장 열기
-    FILE* file = fopen("Rank_list_H.txt", "a");
-    if (file == NULL) {
-        printf("File open error\n");
-        return;
-    }
-
-    // 이름과 점수 파일에 입력
-    fprintf(file, "Player Name: %s\tattempt: %d\n", player_name, attempt);
+    fprintf(file, "Player Name: %s\tScore: %d\n", player_name, score);
 
     fclose(file);
 }
 
 // 플레이어 정보 파일에서 읽기
-int read_attempt_H(Player players[], int max_players) {
-    FILE* file = fopen("Rank_list_H.txt", "r");
+int read_scores(Player players[], int max_players) {
+    FILE* file = fopen("Rank_list.txt", "r");
     if (file == NULL) {
         printf("File open error\n");
         return 0;
     }
 
     int count = 0;
-    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanf의 반환값이 2이면 2가지 값 모두 잘 가져왔단 의미 
+    while (fscanf(file, "Player Name: %49s\tScore: %d\n", players[count].name, &players[count].score) == 2) { // fscanf의 반환값이 2이면 2가지 값 모두 잘 가져왔단 의미 
         count++;
         if (count >= max_players) {
             break;
@@ -429,38 +385,32 @@ int read_attempt_H(Player players[], int max_players) {
     return count;
 }
 
-
 // 점수를 기준으로 오름차순 정렬하는 함수
-int compare_attempt(const void* a, const void* b) {
+int compare_scores(const void* a, const void* b) {
     Player* playerA = (Player*)a;
     Player* playerB = (Player*)b;
-    return playerA->attempt - playerB->attempt; // 오름차순 정렬
+    return playerA->score - playerB->score; // 오름차순 정렬
 }
 
 // 정렬된 결과 출력 함수
-void print_sorted_attempt(Player players[], int count) {
-    printf("\n=== Sorted attempt ===\n");
+void print_sorted_scores(Player players[], int count) {
+    printf("\n=== Sorted Scores ===\n");
     for (int i = 0; i < count; i++) {
-        printf("%d Player Name: %s\tattempt: %d\n", i + 1, players[i].name, players[i].attempt);
+        printf("%d Player Name: %s\tScore: %d\n", i + 1, players[i].name, players[i].score);
     }
 }
 
-void showRanking(int boardSize) {
+void showRanking() {
     // 최대 플레이어 수 정의
     const int MAX_PLAYERS = 100;
     Player players[MAX_PLAYERS];
-    int player_count;
-    if(boardSize==5){
-        player_count = read_attempt_E(players, MAX_PLAYERS);
-    }
-    else{
-        player_count = read_attempt_H(players, MAX_PLAYERS);
-    }
-   
+
+    // 파일에서 플레이어 정보 읽기
+    int player_count = read_scores(players, MAX_PLAYERS);
 
     // 점수 기준으로 정렬
-    qsort(players, player_count, sizeof(Player), compare_attempt);
+    qsort(players, player_count, sizeof(Player), compare_scores);
 
     // 정렬된 결과 출력
-    print_sorted_attempt(players, player_count);
+    print_sorted_scores(players, player_count);
 }
