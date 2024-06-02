@@ -61,25 +61,23 @@ void printHeadUI() {
 
 void printTailUI(int attempts) {
     printf("\033[0;37m");
-    printf("@ @ @ @ @ @ @ @ @ @ @\n");
-    printf("@   Attempts : %d   @\n", attempts);
-    printf("@ @ @ @ @ @ @ @ @ @ @\n");
+    printf("Attempts : %d\n", attempts);
 }
 
 
 void processGuess(char board[][boardSize], int boardSize, int player) {
     int guessRow, guessCol;
-    char cell = board[guessRow][guessCol];
-
+    
     printBoard(board, boardSize);
-    printTailUI(attempts);
-
+    
+    printf("Player %d, enter your guess (row column): ", player);
     while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize)) {
-        while (getchar() != '\n');
+        while (getchar() != '\n'); 
         printf("Invalid guess! Please enter valid coordinates.\n");
-        printf("Player %d, enter your guess(row column): ", player);
+        printf("Player %d, enter your guess (row column): ", player);
     }
 
+    char cell = board[guessRow][guessCol];
     if (cell == 'S') {
         printf("Player %d hit a ship!\n", player);
         Beep(_B,100);
@@ -105,10 +103,10 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     scanf("%d", &difficulty);
     while (getchar() != '\n');  // 입력 버퍼 비우기
 
-    if (difficulty == '1') {
+    if (difficulty == 1) {
         *boardSize = EASY_BOARD_SIZE;
         *shipsCount = EASY_SHIPS_COUNT;
-    } else if (difficulty == '2') {
+    } else if (difficulty == 2) {
         *boardSize = HARD_BOARD_SIZE;
         *shipsCount = HARD_SHIPS_COUNT;
     } else {
@@ -132,6 +130,7 @@ void singlePlay(int boardSize, int shipsCount) {
     while (!hasWon(board, boardSize)) {  // 보드에 전함이 남아있으면
         processGuess(board, boardSize, 1);
         attempts++; //시도 횟수 증가
+        printTailUI(attempts);
     }
 
     time(&end); // 게임 종료 시간 기록
@@ -188,7 +187,9 @@ void multiPlay(int boardSize, int shipsCount) {
     }
 
     // 게임 설명 출력
-    printf("=== Battleship Game ===\n");
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    printf("@        BATTLESHIP        @\n");
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
     printf("Guess the location of the battleship on the board.\n");
     printf("Enter row and column numbers from 0 to %d.\n", boardSize - 1);
 
@@ -236,7 +237,7 @@ void gameMode() {
         selectDifficulty(&boardSize, &shipsCount);
         multiPlay(boardSize, shipsCount);
     } else {
-        printf("wrong!\n");
+        printf("Invaild Select! Try again.\n");
         gameMode(); // 잘못 입력시 다시 모드 선택하도록 함.
     }
 }
@@ -259,6 +260,9 @@ void printBoard(char board[][boardSize], int boardSize) {
             char cell = board[i][j];
             if (cell == '~') {
                 printf("\033[0;34m");
+                printf("%c ", cell);
+            } else if (cell == 'H') {
+                printf("\033[0;33m"); // 노란색
                 printf("%c ", cell);
             } else if (cell == 'O') {
                 printf("\033[0;31m");
