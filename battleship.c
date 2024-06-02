@@ -55,7 +55,7 @@ int main() {
 void printHeadUI() {
     printf("\033[0;37m");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@        BATTLESHIP        @\n");
+    printf("@     BATTLESHIP GAME!     @\n");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
 
@@ -73,7 +73,7 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
     printf("Player %d, enter your guess (row column): ", player);
     while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize)) {
         while (getchar() != '\n'); 
-        printf("Invalid guess! Please enter valid coordinates.\n");
+        printf("Invalid guess! Please enter valid coordinates\n");
         printf("Player %d, enter your guess (row column): ", player);
     }
 
@@ -87,11 +87,11 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
         Beep(_B,100);
         board[guessRow][guessCol] = 'O';
     } else if (cell == '~') {
-        printf("Player %d missed! Try again.\n", player);
+        printf("Player %d missed! Try again\n", player);
         Beep(_F,100);
         board[guessRow][guessCol] = 'X';
     } else {
-        printf("Player %d, you've already guessed this location. Try again.\n", player);
+        printf("Player %d, you've already guessed this location. Try again\n", player);
     }
 }
 
@@ -99,7 +99,7 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     int difficulty;
 
     printf("Select Difficulty\n");
-    printf("1: Easy  2: Hard  --> ");
+    printf("1: Easy  2: Hard  -->  ");
     scanf("%d", &difficulty);
     while (getchar() != '\n');  // 입력 버퍼 비우기
 
@@ -148,7 +148,7 @@ void singlePlay(int boardSize, int shipsCount) {
         rank_input_H(attempts);
     }
 
-    printf("Would you like to check the ranking table? 1: Yes  2: No  --> ");
+    printf("Would you like to check the ranking table?(1: Yes  2: No)  -->  ");
     scanf("%d", &a);
     if (a == 1) {
         showRanking(boardSize);
@@ -165,33 +165,39 @@ void multiPlay(int boardSize, int shipsCount) {
     int mode1, mode2; // 각 플레이어의 배치 모드
 
     // 플레이어 1의 배치 모드 선택
-    printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  --> ");
+    printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  -->  ");
     scanf("%d", &mode1);
     initializeBoard(board1, boardSize);
 
     if (mode1 == 1) {
         placeShips(board1, boardSize, shipsCount);
-    } else {
+    } else if (mode1 == 2) {
         placeShipsRandom(board1, boardSize, shipsCount);
+    } else {
+        printf("Invalid input value!\n");
+        multiPlay(boardSize, shipsCount);
     }
 
     // 플레이어 2의 배치 모드 선택
-    printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  --> ");
+    printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  -->  ");
     scanf("%d", &mode2);
     initializeBoard(board2, boardSize);
 
     if (mode2 == 1) {
         placeShips(board2, boardSize, shipsCount);
-    } else {
+    } else if (mode2 == 2) {
         placeShipsRandom(board2, boardSize, shipsCount);
+    } else {
+        printf("Invalid input value!\n");
+        multiPlay(boardSize, shipsCount);       
     }
 
     // 게임 설명 출력
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
     printf("@        BATTLESHIP        @\n");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("Guess the location of the battleship on the board.\n");
-    printf("Enter row and column numbers from 0 to %d.\n", boardSize - 1);
+    printf("Guess the location of the battleship on the board\n");
+    printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
 
     int turn = 1;
     // 게임 루프
@@ -227,7 +233,7 @@ void gameMode() {
     int n;
     
     printf("Select Mode\n");
-    printf("1: SinglePlay  2: MultiPlay  --> ");
+    printf("1: SinglePlay  2: MultiPlay  -->  ");
     scanf("%d", &n);
 
     if (n == 1) {
@@ -237,7 +243,7 @@ void gameMode() {
         selectDifficulty(&boardSize, &shipsCount);
         multiPlay(boardSize, shipsCount);
     } else {
-        printf("Invaild Select! Try again.\n");
+        printf("Invaild Select! Try again\n");
         gameMode(); // 잘못 입력시 다시 모드 선택하도록 함.
     }
 }
@@ -272,7 +278,7 @@ void printBoard(char board[][boardSize], int boardSize) {
                 printf("%c ", cell);
             } else {
                 printf("\033[0;34m");
-                printf("~");  // Hide ship locations with '~'
+                printf("~ "); 
             }
         }
         printf("\n");
@@ -288,7 +294,7 @@ void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
         int result = scanf("%d %d", &row, &col); // 2개의 정수를 입력받아서 result에 저장
         if (result == 2) { // 2개의 정수가 입력되었을 때만 실행
             if (getchar() != '\n') { // 2개의 정수 이후에 추가 문자가 버퍼에 남아있다면
-                printf("Too many inputs. Only enter two numbers. Try again.\n");
+                printf("Too many inputs. Only enter two numbers. Try again\n");
                 while (getchar() != '\n'); // 버퍼에 남은 모든 문자를 버리며 '\n'를 만날 때까지 반복
                 i--; // i를 감소시켜 이번 입력을 무효화하고, 입력을 다시 받도록 함
                 continue; // for 루프의 처음으로 돌아가 재시작
@@ -296,17 +302,17 @@ void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
 
             if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
                 if (board[row][col] != '~') {
-                    printf("There is already a ship at that location. Try again.\n");
+                    printf("There is already a ship at that location. Try again\n");
                     i--; // 잘못된 위치 입력 시 다시 입력
                 } else {
                     board[row][col] = 'S';
                 }
             } else {
-                printf("Invalid coordinates. Try again.\n");
+                printf("Invalid coordinates. Try again\n");
                 i--; // 범위 밖 좌표 입력 시 다시 입력
             }
         } else { // 입력받은 데이터가 2개의 정수가 아니라면
-            printf("Invalid input. You need to enter only two numbers. Try again.\n");
+            printf("Invalid input. You need to enter only two numbers. Try again\n");
             while (getchar() != '\n'); // 버퍼에 남은 모든 문자를 버리며 '\n'를 만날 때까지 반복
             i--; // i를 감소시켜 이번 입력을 무효화하고, 입력을 다시 받도록 함
         }
