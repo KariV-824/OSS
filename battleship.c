@@ -165,7 +165,7 @@ void singlePlay(int boardSize, int shipsCount) {
     while (!hasWon(board, boardSize)) {  
         processGuess(board, boardSize, 0);
         attempts++; 
-        printTailUI(attempts,remainShips1,findShipcnt1);
+        printTailUI(attempts, remainShips1, findShipcnt1);
     }
 
     time(&end);
