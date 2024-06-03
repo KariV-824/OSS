@@ -55,7 +55,7 @@ void print_sorted_attempt(Player players[], int count);
 void showRanking(int boardSize);
 
 int main() {
-    gameMode(); // 게임 모드 설정
+    gameMode(); // 게임 모드 설정   
     return 0;
 }
 
@@ -226,15 +226,14 @@ void multiPlay(int boardSize, int shipsCount) {
     }
 
     // 게임 설명 출력
-    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@     BATTLESHIP GAME!     @\n");
-    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    printHeadUI();
     printf("Guess the location of the battleship on the board\n");
     printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
 
     int turn = 1;
     // 게임 루프
     while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {  // 보드에 전함이 남아있으면
+        printMultiUI(attempts,remainShips1,remainShips2,findShipcnt1,findShipcnt2);
         if (turn == 1) {
             printf("Player 1's turn: \n");
             processGuess(board1, boardSize, 1);
