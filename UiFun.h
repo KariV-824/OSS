@@ -17,6 +17,6 @@
 
 
 void printHeadUI();
-void printTailUI(int attempts);
-
+void printTailUI(int attempts, int remain, int find);
+void printMultiUI(int attempts, int remain1, int remain2, int find1, int find2);
 #endif

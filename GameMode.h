@@ -18,6 +18,11 @@
 extern int attempts;
 extern int boardSize;
 extern int shipsCount;
+extern int remainships1;
+extern int remainships2;
+extern int findshipcnt1;
+extern int findshipcnt2;
+
 
 void selectDifficulty(int* boardSize, int* shipsCount);
 void singlePlay(int boardSize, int shipsCount);

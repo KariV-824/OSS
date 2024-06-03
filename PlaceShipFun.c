@@ -1,7 +1,53 @@
 #include "PlaceshipFun.h"
 
+int remainships1=0;
+int remainships2=0;
+int findshipcnt1=0;
+int findshipcnt2=0;
 
 // 전함을 보드에 배치하는 함수
+void initializeBoard(char board[][boardSize], int boardSize) { // ��� '~'�� �������
+    int i, j;
+    for (i = 0; i < boardSize; i++) {
+        for (j = 0; j < boardSize; j++) {
+            board[i][j] = '~'; // '~'�� �� ĭ�� ��Ÿ��
+        }
+    }
+}
+
+// ���� ��ġ�� ���߰� ���带 ����ϴ� �Լ�
+void printBoard(char board[][boardSize], int boardSize) {
+    int i, j;
+    for (i = 0; i < boardSize; i++) {
+        for (j = 0; j < boardSize; j++) {
+            char cell = board[i][j];
+            if (cell == '~') {
+                printf("\033[0;34m");
+                printf("%c ", cell);
+                printf("\033[0;37m");
+            } else if (cell == 'H') {
+                printf("\033[0;33m"); // 노란색
+                printf("%c ", cell);
+                printf("\033[0;37m");
+            } else if (cell == 'O') {
+                printf("\033[0;31m");
+                printf("%c ", cell);
+                printf("\033[0;37m");
+            } else if (cell == 'X') {
+                printf("\033[0;36m");
+                printf("%c ", cell);
+                printf("\033[0;37m");
+            } else {
+                printf("\033[0;34m");
+                printf("~ ");
+                printf("\033[0;37m"); 
+            }
+        }
+        printf("\n");
+    }
+}
+
+// ������ ���忡 ��ġ�ϴ� �Լ�
 void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
     int i;
     for (i = 0; i < shipsCount; i++) {
@@ -67,42 +113,6 @@ int hasWon(char board[][boardSize], int boardSize) {
     }
     return 1; // 모든 전함이 격추됨
 }
-// 보드를 빈 칸으로 초기화하는 함수
-void initializeBoard(char board[][boardSize], int boardSize) { // 모두 '~'로 출력함함
-    int i, j;
-    for (i = 0; i < boardSize; i++) {
-        for (j = 0; j < boardSize; j++) {
-            board[i][j] = '~'; // '~'는 빈 칸을 나타냄
-        }
-    }
-}
-
-// 전함 위치를 감추고 보드를 출력하는 함수
-void printBoard(char board[][boardSize], int boardSize) {
-    int i, j;
-    for (i = 0; i < boardSize; i++) {
-        for (j = 0; j < boardSize; j++) {
-            char cell = board[i][j];
-            if (cell == '~') {
-                printf("\033[0;34m");
-                printf("%c ", cell);
-            } else if (cell == 'H') {
-                printf("\033[0;33m"); // 노란색
-                printf("%c ", cell);
-            } else if (cell == 'O') {
-                printf("\033[0;31m");
-                printf("%c ", cell);
-            } else if (cell == 'X') {
-                printf("\033[0;36m");
-                printf("%c ", cell);
-            } else {
-                printf("\033[0;34m");
-                printf("~");  // Hide ship locations with '~'
-            }
-        }
-        printf("\n");
-    }
-}
 
 
 void processGuess(char board[][boardSize], int boardSize, int player) {
@@ -113,7 +123,7 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
     printf("Player %d, enter your guess (row column): ", player);
     while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize)) {
         while (getchar() != '\n'); 
-        printf("Invalid guess! Please enter valid coordinates.\n");
+        printf("Invalid guess! Please enter valid coordinates\n");
         printf("Player %d, enter your guess (row column): ", player);
     }
 
@@ -124,6 +134,22 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
         board[guessRow][guessCol] = 'H';
     } else if (cell == 'H') {
         printf("Player %d, congratulations! You destroyed a ship!\n", player);
+      
+        if (player == 0)
+        {
+            findshipcnt1++;
+            remainships1--;
+        }
+        else if(player == 1)
+        {
+            findshipcnt1++;
+            remainships2--;
+        }
+        else
+        {
+            findshipcnt2++;
+            remainships1--;
+        }
         Beep(_B,100);
         board[guessRow][guessCol] = 'O';
     } else if (cell == '~') {
@@ -134,7 +160,6 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
         printf("Player %d, you've already guessed this location. Try again.\n", player);
     }
 }
-
 
 
 

@@ -4,6 +4,10 @@
 
 int boardSize;
 int shipsCount;
+int remainships1;
+int remainships2;
+int findshipcnt1;
+int findshipcnt2;
 
 void placeShips(char board[][boardSize], int boardSize, int shipsCount);
 void placeShipsRandom(char board[][boardSize], int boardSize, int shipsCount);
