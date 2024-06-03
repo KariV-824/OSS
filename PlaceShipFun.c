@@ -1,21 +1,21 @@
 #include "PlaceshipFun.h"
 
-int remainships1=0;
-int remainships2=0;
-int findshipcnt1=0;
-int findshipcnt2=0;
+int remainShips1=0;
+int remainShips2=0;
+int findShipcnt1=0;
+int findShipcnt2=0;
 
-// 전함을 보드에 배치하는 함수
-void initializeBoard(char board[][boardSize], int boardSize) { // ��� '~'�� �������
+// 보드를 빈 칸으로 초기화하는 함수
+void initializeBoard(char board[][boardSize], int boardSize) { // 모두 '~'로 출력함함
     int i, j;
     for (i = 0; i < boardSize; i++) {
         for (j = 0; j < boardSize; j++) {
-            board[i][j] = '~'; // '~'�� �� ĭ�� ��Ÿ��
+            board[i][j] = '~'; // '~'는 빈 칸을 나타냄
         }
     }
 }
 
-// ���� ��ġ�� ���߰� ���带 ����ϴ� �Լ�
+// 전함 위치를 감추고 보드를 출력하는 함수
 void printBoard(char board[][boardSize], int boardSize) {
     int i, j;
     for (i = 0; i < boardSize; i++) {
@@ -40,14 +40,14 @@ void printBoard(char board[][boardSize], int boardSize) {
             } else {
                 printf("\033[0;34m");
                 printf("~ ");
-                printf("\033[0;37m"); 
+                printf("\033[0;37m");
             }
         }
         printf("\n");
     }
 }
 
-// ������ ���忡 ��ġ�ϴ� �Լ�
+// 전함을 보드에 배치하는 함수
 void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
     int i;
     for (i = 0; i < shipsCount; i++) {
@@ -56,7 +56,7 @@ void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
         int result = scanf("%d %d", &row, &col); // 2개의 정수를 입력받아서 result에 저장
         if (result == 2) { // 2개의 정수가 입력되었을 때만 실행
             if (getchar() != '\n') { // 2개의 정수 이후에 추가 문자가 버퍼에 남아있다면
-                printf("Too many inputs. Only enter two numbers. Try again.\n");
+                printf("Too many inputs. Only enter two numbers. Try again\n");
                 while (getchar() != '\n'); // 버퍼에 남은 모든 문자를 버리며 '\n'를 만날 때까지 반복
                 i--; // i를 감소시켜 이번 입력을 무효화하고, 입력을 다시 받도록 함
                 continue; // for 루프의 처음으로 돌아가 재시작
@@ -64,17 +64,17 @@ void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
 
             if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
                 if (board[row][col] != '~') {
-                    printf("There is already a ship at that location. Try again.\n");
+                    printf("There is already a ship at that location. Try again\n");
                     i--; // 잘못된 위치 입력 시 다시 입력
                 } else {
                     board[row][col] = 'S';
                 }
             } else {
-                printf("Invalid coordinates. Try again.\n");
+                printf("Invalid coordinates. Try again\n");
                 i--; // 범위 밖 좌표 입력 시 다시 입력
             }
         } else { // 입력받은 데이터가 2개의 정수가 아니라면
-            printf("Invalid input. You need to enter only two numbers. Try again.\n");
+            printf("Invalid input. You need to enter only two numbers. Try again\n");
             while (getchar() != '\n'); // 버퍼에 남은 모든 문자를 버리며 '\n'를 만날 때까지 반복
             i--; // i를 감소시켜 이번 입력을 무효화하고, 입력을 다시 받도록 함
         }
@@ -115,6 +115,7 @@ int hasWon(char board[][boardSize], int boardSize) {
 }
 
 
+
 void processGuess(char board[][boardSize], int boardSize, int player) {
     int guessRow, guessCol;
     
@@ -134,32 +135,27 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
         board[guessRow][guessCol] = 'H';
     } else if (cell == 'H') {
         printf("Player %d, congratulations! You destroyed a ship!\n", player);
-      
-        if (player == 0)
-        {
-            findshipcnt1++;
-            remainships1--;
-        }
-        else if(player == 1)
-        {
-            findshipcnt1++;
-            remainships2--;
-        }
-        else
-        {
-            findshipcnt2++;
-            remainships1--;
+        if (player == 0) {
+            findShipcnt1++;
+            remainShips1--;
+        } else if(player == 1) {
+            findShipcnt1++;
+            remainShips2--;
+        } else {
+            findShipcnt2++;
+            remainShips1--;
         }
         Beep(_B,100);
         board[guessRow][guessCol] = 'O';
     } else if (cell == '~') {
-        printf("Player %d missed! Try again.\n", player);
+        printf("Player %d missed! Try again\n", player);
         Beep(_F,100);
         board[guessRow][guessCol] = 'X';
     } else {
-        printf("Player %d, you've already guessed this location. Try again.\n", player);
+        printf("Player %d, you've already guessed this location. Try again\n", player);
     }
 }
+
 
 
 
