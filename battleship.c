@@ -67,9 +67,9 @@ void printHeadUI() {
 void printTailUI(int attempts, int remain, int find) {
     printf("\033[0;37m");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@             Attempts : %d               @\n", attempts);
-    printf("@              Remain : %d                @\n", remain);
-    printf("@              Found :  %d                @\n", find);
+    printf("@              Attempts : %d               @\n", attempts);
+    printf("@               Remain : %d                @\n", remain);
+    printf("@               Found :  %d                @\n", find);
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
 
