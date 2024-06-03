@@ -27,7 +27,14 @@ typedef struct { // 플레이어 정보 구조체 정의
 int boardSize = 0;
 int shipsCount = 0;
 int attempts = 0;
+int remainShips1 = 0;
+int remainShips2 = 0;
+int findShipcnt1 = 0;
+int findShipcnt2 = 0;
 
+void printHeadUI();
+void printTailUI(int attempts, int remain, int find);
+void printMultiUI(int attempts, int remain1, int remain2, int find1, int find2);
 void processGuess(char board[][boardSize], int boardSize, int player);
 void selectDifficulty(int* boardSize, int* shipsCount);
 void singlePlay(int boardSize, int shipsCount);
@@ -59,11 +66,23 @@ void printHeadUI() {
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
 
-void printTailUI(int attempts) {
+void printTailUI(int attempts, int remain, int find) {
     printf("\033[0;37m");
-    printf("Attempts : %d\n", attempts);
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    printf("@              Attempts : %d              @\n", attempts);
+    printf("@               Remain : %d               @\n", remain);
+    printf("@                Find :  %d               @\n", find);
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
 
+void printMultiUI(int attempts, int remain1, int remain2, int find1, int find2) {
+    printf("\033[0;37m");
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+    printf("@              Attempts : %d              @\n", attempts);
+    printf("@   P1 Remain : %d       P2 Remain : %d   @\n", remain1, remain2);
+    printf("@    P1 Find : %d         P2 Find : %d    @\n", find1, find2);
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+}
 
 void processGuess(char board[][boardSize], int boardSize, int player) {
     int guessRow, guessCol;
@@ -84,6 +103,16 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
         board[guessRow][guessCol] = 'H';
     } else if (cell == 'H') {
         printf("Player %d, congratulations! You destroyed a ship!\n", player);
+        if (player == 0) {
+            findShipcnt1++;
+            remainShips1--;
+        } else if(player == 1) {
+            findShipcnt1++;
+            remainShips2--;
+        } else {
+            findShipcnt2++;
+            remainShips1--;
+        }
         Beep(_B,100);
         board[guessRow][guessCol] = 'O';
     } else if (cell == '~') {
@@ -106,9 +135,13 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     if (difficulty == 1) {
         *boardSize = EASY_BOARD_SIZE;
         *shipsCount = EASY_SHIPS_COUNT;
+        remainShips1 = EASY_SHIPS_COUNT;
+        remainShips2 = EASY_SHIPS_COUNT;
     } else if (difficulty == 2) {
         *boardSize = HARD_BOARD_SIZE;
         *shipsCount = HARD_SHIPS_COUNT;
+        remainShips1 = HARD_SHIPS_COUNT;
+        remainShips2 = HARD_SHIPS_COUNT;
     } else {
         printf("Invalid input value!\n");
         selectDifficulty(boardSize, shipsCount);
@@ -130,7 +163,7 @@ void singlePlay(int boardSize, int shipsCount) {
     while (!hasWon(board, boardSize)) {  // 보드에 전함이 남아있으면
         processGuess(board, boardSize, 1);
         attempts++; //시도 횟수 증가
-        printTailUI(attempts);
+        printTailUI(attempts, remainShips1, findShipcnt1);
     }
 
     time(&end); // 게임 종료 시간 기록
@@ -194,7 +227,7 @@ void multiPlay(int boardSize, int shipsCount) {
 
     // 게임 설명 출력
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@        BATTLESHIP        @\n");
+    printf("@     BATTLESHIP GAME!     @\n");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
     printf("Guess the location of the battleship on the board\n");
     printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
@@ -267,18 +300,23 @@ void printBoard(char board[][boardSize], int boardSize) {
             if (cell == '~') {
                 printf("\033[0;34m");
                 printf("%c ", cell);
+                printf("\033[0;37m");
             } else if (cell == 'H') {
                 printf("\033[0;33m"); // 노란색
                 printf("%c ", cell);
+                printf("\033[0;37m");
             } else if (cell == 'O') {
                 printf("\033[0;31m");
                 printf("%c ", cell);
+                printf("\033[0;37m");
             } else if (cell == 'X') {
                 printf("\033[0;36m");
                 printf("%c ", cell);
+                printf("\033[0;37m");
             } else {
                 printf("\033[0;34m");
-                printf("~ "); 
+                printf("~ ");
+                printf("\033[0;37m");
             }
         }
         printf("\n");
