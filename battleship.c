@@ -90,7 +90,7 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
     printBoard(board, boardSize);
     
     printf("Player %d, enter your guess (row column): ", player);
-    while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize)) {
+    while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize) || getchar() != '\n') {
         while (getchar() != '\n'); 
         printf("Invalid guess! Please enter valid coordinates\n");
         printf("Player %d, enter your guess (row column): ", player);
