@@ -19,7 +19,7 @@
 #define _A 1760.000
 #define _B 1975.533
 
-typedef struct { // �÷��̾� ���� ����ü ����
+typedef struct {
     char name[50];
     int attempt;
 } Player;
@@ -32,6 +32,9 @@ int remainships2 = 0;
 int findshipcnt1 = 0;
 int findshipcnt2 = 0;
 
+void printHeadUI();
+void printTailUI(int attempts, int remain, int find);
+void printMultiUI(int attempts, int remain1, int remain2, int find1, int find2);
 void processGuess(char board[][boardSize], int boardSize, int player);
 void selectDifficulty(int* boardSize, int* shipsCount);
 void singlePlay(int boardSize, int shipsCount);
@@ -52,36 +55,34 @@ void print_sorted_attempt(Player players[], int count);
 void showRanking(int boardSize);
 
 int main() {
-    gameMode(); // 게임 모드 설정
-
+    gameMode();  
     return 0;
 }
 
 void printHeadUI() {
     printf("\033[0;37m");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@        BATTLESHIP        @\n");
+    printf("@     BATTLESHIP GAME!     @\n");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
 
 void printTailUI(int attempts, int remain, int find) {
     printf("\033[0;37m");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@              Attempts : %d               @\n", attempts);
-    printf("@               Remain : %d                @\n", remain);
-    printf("@               Found :  %d                @\n", find);
+    printf("@               Attempts : %d              @\n", attempts);
+    printf("@                Remain : %d               @\n", remain);
+    printf("@                 Find :  %d               @\n", find);
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
 
 void printMultiUI(int attempts, int remain1, int remain2, int find1, int find2) {
     printf("\033[0;37m");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@              Attempts : %d               @\n", attempts);
-    printf("@ P1 Remain : %d             P2 Remain : %d @\n", remain1,remain2);
-    printf("@ P1  Found : %d             P2 Found : %d  @\n", find1,find2);
+    printf("@              Attempts : %d              @\n", attempts);
+    printf("@   P1 Remain : %d       P2 Remain : %d   @\n", remain1, remain2);
+    printf("@    P1 Find : %d         P2 Find : %d    @\n", find1, find2);
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 }
-
 
 void processGuess(char board[][boardSize], int boardSize, int player) {
     int guessRow, guessCol;
@@ -89,7 +90,7 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
     printBoard(board, boardSize);
     
     printf("Player %d, enter your guess (row column): ", player);
-    while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize)) {
+    while (scanf("%d %d", &guessRow, &guessCol) != 2 || !isValidGuess(guessRow, guessCol, boardSize) || getchar() != '\n') {
         while (getchar() != '\n'); 
         printf("Invalid guess! Please enter valid coordinates\n");
         printf("Player %d, enter your guess (row column): ", player);
@@ -120,11 +121,11 @@ void processGuess(char board[][boardSize], int boardSize, int player) {
         Beep(_B,100);
         board[guessRow][guessCol] = 'O';
     } else if (cell == '~') {
-        printf("Player %d missed! Try again.\n", player);
+        printf("Player %d missed! Try again\n", player);
         Beep(_F,100);
         board[guessRow][guessCol] = 'X';
     } else {
-        printf("Player %d, you've already guessed this location. Try again.\n", player);
+        printf("Player %d, you've already guessed this location. Try again\n", player);
     }
 }
 
@@ -134,7 +135,7 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     printf("Select Difficulty\n");
     printf("1: Easy  2: Hard  -->  ");
     scanf("%d", &difficulty);
-    while (getchar() != '\n');  // �Է� ���� ����
+    while (getchar() != '\n'); 
 
     if (difficulty == 1) {
         *boardSize = EASY_BOARD_SIZE;
@@ -155,39 +156,36 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
 void singlePlay(int boardSize, int shipsCount) {
     char board[boardSize][boardSize];
     int guessRow, guessCol;
-
-
     int a = 0;
-    time_t start, end; // �ð� ������ ���� ����
+    time_t start, end; 
 
-    initializeBoard(board, boardSize); // �ʱ�ȭ
-    placeShipsRandom(board, boardSize, shipsCount); // ���� ��ġ
+    initializeBoard(board, boardSize); 
+    placeShipsRandom(board, boardSize, shipsCount); 
     printHeadUI();
 
-    time(&start); // ���� ���� �ð� ���
-    // ���� ����
-    while (!hasWon(board, boardSize)) {  // ���忡 ������ ����������
+    time(&start);
+    
+    while (!hasWon(board, boardSize)) {  
         processGuess(board, boardSize, 0);
-        attempts++; //�õ� Ƚ�� ����
+        attempts++; 
         printTailUI(attempts,remainships1,findshipcnt1);
     }
 
-    time(&end); // ���� ���� �ð� ���
-    int time_taken = difftime(end, start); // �ɸ� �ð� ���
+    time(&end);
+    int time_taken = difftime(end, start); 
 
-    // ���� ����, ���� ���� ���¿� �õ� Ƚ�� ���
+
     printf("\n");
     printBoard(board, boardSize);
     printf("Congratulations! All battleships have been shot down. Attempts: %d\n", attempts);
-    printf("Time taken: %d seconds\n", time_taken); // �� �ҿ� �ð� ���
-    
+    printf("Time taken: %d seconds\n", time_taken);
     if (boardSize == 5) {
         rank_input_E(attempts);
     } else {
         rank_input_H(attempts);
     }
 
-    printf("Would you like to check the ranking table? 1: Yes  2: No  --> ");
+    printf("Would you like to check the ranking table?(1: Yes  2: No)  -->  ");
     scanf("%d", &a);
     if (a == 1) {
         showRanking(boardSize);
@@ -197,14 +195,14 @@ void singlePlay(int boardSize, int shipsCount) {
 }
 
 void multiPlay(int boardSize, int shipsCount) {
-    char board1[boardSize][boardSize]; // 1플레이어 보드
-    char board2[boardSize][boardSize]; // 2플레이어 보드 
+    char board1[boardSize][boardSize];
+    char board2[boardSize][boardSize];
     int guessRow1, guessCol1;
     int guessRow2, guessCol2;
-    int mode1, mode2; // 각 플레이어의 배치 모드
+    int mode1, mode2; 
 
-    // 플레이어 1의 배치 모드 선택
-    printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  --> ");
+ 
+    printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  -->  ");
     scanf("%d", &mode1);
     while(getchar() != '\n');
     initializeBoard(board1, boardSize);
@@ -218,8 +216,8 @@ void multiPlay(int boardSize, int shipsCount) {
         multiPlay(boardSize, shipsCount);
     }
 
-    // 플레이어 2의 배치 모드 선택
-    printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  --> ");
+ 
+    printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  -->  ");
     scanf("%d", &mode2);
     while(getchar() != '\n');
     initializeBoard(board2, boardSize);
@@ -230,18 +228,18 @@ void multiPlay(int boardSize, int shipsCount) {
         placeShipsRandom(board2, boardSize, shipsCount);
     } else {
         printf("Invalid input value!\n");
-        multiPlay(boardSize, shipsCount);
+        multiPlay(boardSize, shipsCount);       
     }
 
-    // ���� ���� ���
+
     printHeadUI();
     printf("Guess the location of the battleship on the board\n");
     printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
 
     int turn = 1;
-    // ���� ����
+
     while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {
-        printMultiUI(attempts,remainships1,remainships2,findshipcnt1,findshipcnt2);  // ���忡 ������ ����������
+        printMultiUI(attempts,remainships1,remainships2,findshipcnt1,findshipcnt2);
         if (turn == 1) {
             printf("Player 1's turn: \n");
             processGuess(board1, boardSize, 1);
@@ -273,7 +271,7 @@ void gameMode() {
     int n;
     
     printf("Select Mode\n");
-    printf("1: SinglePlay  2: MultiPlay  --> ");
+    printf("1: SinglePlay  2: MultiPlay  -->  ");
     scanf("%d", &n);
     while(getchar() != '\n');
 
@@ -285,21 +283,21 @@ void gameMode() {
         multiPlay(boardSize, shipsCount);
     } else {
         printf("Invaild Select! Try again\n");
-        gameMode(); // �߸� �Է½� �ٽ� ��� �����ϵ��� ��.
+        gameMode();
     }
 }
 
-// ���带 �� ĭ���� �ʱ�ȭ�ϴ� �Լ�
-void initializeBoard(char board[][boardSize], int boardSize) { // ��� '~'�� �������
+
+void initializeBoard(char board[][boardSize], int boardSize) {
     int i, j;
     for (i = 0; i < boardSize; i++) {
         for (j = 0; j < boardSize; j++) {
-            board[i][j] = '~'; // '~'�� �� ĭ�� ��Ÿ��
+            board[i][j] = '~'; 
         }
     }
 }
 
-// ���� ��ġ�� ���߰� ���带 ����ϴ� �Լ�
+
 void printBoard(char board[][boardSize], int boardSize) {
     int i, j;
     for (i = 0; i < boardSize; i++) {
@@ -310,7 +308,7 @@ void printBoard(char board[][boardSize], int boardSize) {
                 printf("%c ", cell);
                 printf("\033[0;37m");
             } else if (cell == 'H') {
-                printf("\033[0;33m"); // 노란색
+                printf("\033[0;33m");
                 printf("%c ", cell);
                 printf("\033[0;37m");
             } else if (cell == 'O') {
@@ -324,14 +322,14 @@ void printBoard(char board[][boardSize], int boardSize) {
             } else {
                 printf("\033[0;34m");
                 printf("~ ");
-                printf("\033[0;37m"); 
+                printf("\033[0;37m");
             }
         }
         printf("\n");
     }
 }
 
-// ������ ���忡 ��ġ�ϴ� �Լ�
+
 void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
     int i;
     for (i = 0; i < shipsCount; i++) {
@@ -398,26 +396,25 @@ int hasWon(char board[][boardSize], int boardSize) {
     return 1; // 모든 전함이 격추됨
 }
 
-// Easy 모드 플레이어 정보 입력 함수
 void rank_input_E(int attempt) {
     char player_name[50];
 
     printf("Game Over. Enter name: ");
     scanf("%s", player_name);
 
-    // 메모장 열기
+
     FILE* file = fopen("Rank_list_E.txt", "a");
     if (file == NULL) {
         printf("File open error\n");
         return;
     }
 
-    // 이름과 점수 파일에 입력
+
     fprintf(file, "Player Name: %s\tattempt: %d\n", player_name, attempt);
     fclose(file);
 }
 
-// Easy 모드 플레이어 정보 파일에서 읽기
+
 int read_attempt_E(Player players[], int max_players) {
     FILE* file = fopen("Rank_list_E.txt", "r");
     if (file == NULL) {
@@ -426,7 +423,7 @@ int read_attempt_E(Player players[], int max_players) {
     }
 
     int count = 0;
-    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanf의 반환값이 2이면 2가지 값 모두 잘 가져왔단 의미 
+    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) {
         count++;
         if (count >= max_players) {
             break;
@@ -437,26 +434,25 @@ int read_attempt_E(Player players[], int max_players) {
     return count;
 }
 
-// Hard 모드 플레이어 정보 입력 함수
+
 void rank_input_H(int attempt) {
     char player_name[50];
 
     printf("Game Over. Enter name: ");
     scanf("%s", player_name);
 
-    // 메모장 열기
     FILE* file = fopen("Rank_list_H.txt", "a");
     if (file == NULL) {
         printf("File open error\n");
         return;
     }
 
-    // 이름과 점수 파일에 입력
+
     fprintf(file, "Player Name: %s\tattempt: %d\n", player_name, attempt);
     fclose(file);
 }
 
-// 플레이어 정보 파일에서 읽기
+
 int read_attempt_H(Player players[], int max_players) {
     FILE* file = fopen("Rank_list_H.txt", "r");
     if (file == NULL) {
@@ -465,7 +461,7 @@ int read_attempt_H(Player players[], int max_players) {
     }
 
     int count = 0;
-    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanf의 반환값이 2이면 2가지 값 모두 잘 가져왔단 의미 
+    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) {
         count++;
         if (count >= max_players) {
             break;
@@ -476,14 +472,14 @@ int read_attempt_H(Player players[], int max_players) {
     return count;
 }
 
-// 점수를 기준으로 오름차순 정렬하는 함수
+
 int compare_attempt(const void* a, const void* b) {
     Player* playerA = (Player*)a;
     Player* playerB = (Player*)b;
-    return playerA->attempt - playerB->attempt; // 오름차순 정렬
+    return playerA->attempt - playerB->attempt; 
 }
 
-// 정렬된 결과 출력 함수
+
 void print_sorted_attempt(Player players[], int count) {
     int i;
     printf("\n=== Sorted attempt ===\n");
@@ -503,6 +499,6 @@ void showRanking(int boardSize) {
         player_count = read_attempt_H(players, MAX_PLAYERS);
     }
     
-    qsort(players, player_count, sizeof(Player), compare_attempt); // 점수 기준으로 정렬
-    print_sorted_attempt(players, player_count); // 정렬된 결과 출력
+    qsort(players, player_count, sizeof(Player), compare_attempt); 
+    print_sorted_attempt(players, player_count); 
 }
