@@ -3,11 +3,13 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string.h>
+
 #include <time.h>
 #pragma comment (lib, "winmm.lib")
 
 #define EASY_BOARD_SIZE 5   
 #define EASY_SHIPS_COUNT 4 
+
 #define HARD_BOARD_SIZE 6
 #define HARD_SHIPS_COUNT 7
 
@@ -19,7 +21,8 @@
 #define _A 1760.000
 #define _B 1975.533
 
-typedef struct { // ÇÃ·¹ÀÌ¾î Á¤º¸ ±¸Á¶Ã¼ Á¤ÀÇ
+// í”Œë ˆì´ì–´ ì •ë³´ êµ¬ì¡°ì²´ ì •ì˜
+typedef struct {
     char name[50];
     int attempt;
 } Player;
@@ -55,7 +58,7 @@ void print_sorted_attempt(Player players[], int count);
 void showRanking(int boardSize);
 
 int main() {
-    gameMode(); // °ÔÀÓ ¸ğµå ¼³Á¤
+    gameMode(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     return 0;
 }
 
@@ -130,7 +133,7 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     printf("Select Difficulty\n");
     printf("1: Easy  2: Hard  -->  ");
     scanf("%d", &difficulty);
-    while (getchar() != '\n');  // ÀÔ·Â ¹öÆÛ ºñ¿ì±â
+    while (getchar() != '\n');  // ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     if (difficulty == 1) {
         *boardSize = EASY_BOARD_SIZE;
@@ -145,35 +148,37 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     } else {
         printf("Invalid input value!\n");
         selectDifficulty(boardSize, shipsCount);
+
     }
 }
+
 
 void singlePlay(int boardSize, int shipsCount) {
     char board[boardSize][boardSize];
     int guessRow, guessCol;
     int a = 0;
-    time_t start, end; // ½Ã°£ ÃøÁ¤À» À§ÇÑ º¯¼ö
+    time_t start, end; // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    initializeBoard(board, boardSize); // ÃÊ±âÈ­
-    placeShipsRandom(board, boardSize, shipsCount); // ·£´ı ¹èÄ¡
+    initializeBoard(board, boardSize); // ï¿½Ê±ï¿½È­
+    placeShipsRandom(board, boardSize, shipsCount); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
     printHeadUI();
 
-    time(&start); // °ÔÀÓ ½ÃÀÛ ½Ã°£ ±â·Ï
-    // °ÔÀÓ ·çÇÁ
-    while (!hasWon(board, boardSize)) {  // º¸µå¿¡ ÀüÇÔÀÌ ³²¾ÆÀÖÀ¸¸é
+    time(&start); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    while (!hasWon(board, boardSize)) {  // ï¿½ï¿½ï¿½å¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         processGuess(board, boardSize, 1);
-        attempts++; //½Ãµµ È½¼ö Áõ°¡
+        attempts++; //ï¿½Ãµï¿½ È½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         printTailUI(attempts, remainShips1, findShipcnt1);
     }
 
-    time(&end); // °ÔÀÓ Á¾·á ½Ã°£ ±â·Ï
-    int time_taken = difftime(end, start); // °É¸° ½Ã°£ °è»ê
+    time(&end); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½
+    int time_taken = difftime(end, start); // ï¿½É¸ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½
 
-    // °ÔÀÓ Á¾·á, ÃÖÁ¾ º¸µå »óÅÂ¿Í ½Ãµµ È½¼ö Ãâ·Â
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½Ãµï¿½ È½ï¿½ï¿½ ï¿½ï¿½ï¿½
     printf("\n");
     printBoard(board, boardSize);
     printf("Congratulations! All battleships have been shot down. Attempts: %d\n", attempts);
-    printf("Time taken: %d seconds\n", time_taken); // ÃÑ ¼Ò¿ä ½Ã°£ Ãâ·Â
+    printf("Time taken: %d seconds\n", time_taken); // ï¿½ï¿½ ï¿½Ò¿ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½
     
     if (boardSize == 5) {
         rank_input_E(attempts);
@@ -186,18 +191,20 @@ void singlePlay(int boardSize, int shipsCount) {
     if (a == 1) {
         showRanking(boardSize);
     } else if ( a == 2) {
+
         return;
     }
 }
 
+
 void multiPlay(int boardSize, int shipsCount) {
-    char board1[boardSize][boardSize]; // 1ÇÃ·¹ÀÌ¾î º¸µå
-    char board2[boardSize][boardSize]; // 2ÇÃ·¹ÀÌ¾î º¸µå 
+    char board1[boardSize][boardSize]; // 1ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+    char board2[boardSize][boardSize]; // 2ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ 
     int guessRow1, guessCol1;
     int guessRow2, guessCol2;
-    int mode1, mode2; // °¢ ÇÃ·¹ÀÌ¾îÀÇ ¹èÄ¡ ¸ğµå
+    int mode1, mode2; // ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
 
-    // ÇÃ·¹ÀÌ¾î 1ÀÇ ¹èÄ¡ ¸ğµå ¼±ÅÃ
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ 1ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  -->  ");
     scanf("%d", &mode1);
     initializeBoard(board1, boardSize);
@@ -211,7 +218,7 @@ void multiPlay(int boardSize, int shipsCount) {
         multiPlay(boardSize, shipsCount);
     }
 
-    // ÇÃ·¹ÀÌ¾î 2ÀÇ ¹èÄ¡ ¸ğµå ¼±ÅÃ
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ 2ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  -->  ");
     scanf("%d", &mode2);
     initializeBoard(board2, boardSize);
@@ -225,7 +232,7 @@ void multiPlay(int boardSize, int shipsCount) {
         multiPlay(boardSize, shipsCount);       
     }
 
-    // °ÔÀÓ ¼³¸í Ãâ·Â
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
     printf("@     BATTLESHIP GAME!     @\n");
     printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
@@ -233,10 +240,11 @@ void multiPlay(int boardSize, int shipsCount) {
     printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
 
     int turn = 1;
-    // °ÔÀÓ ·çÇÁ
-    while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {  // º¸µå¿¡ ÀüÇÔÀÌ ³²¾ÆÀÖÀ¸¸é
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {  // ï¿½ï¿½ï¿½å¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (turn == 1) {
             printf("Player 1's turn: \n");
+
             processGuess(board1, boardSize, 1);
             if (hasWon(board1, boardSize)) {
                 printf("Player 1 wins!\n");
@@ -245,6 +253,7 @@ void multiPlay(int boardSize, int shipsCount) {
             turn = 2;
         } else {
             printf("Player 2's turn: \n");
+
             processGuess(board2, boardSize, 2);
             if (hasWon(board2, boardSize)) {
                 printf("Player 2 wins!\n");
@@ -254,13 +263,15 @@ void multiPlay(int boardSize, int shipsCount) {
         }
     }
 
-    // °ÔÀÓ Á¾·á, ÃÖÁ¾ º¸µå »óÅÂ Ãâ·Â 
+
+    // ê²Œì„ ì¢…ë£Œ, ìµœì¢… ë³´ë“œ ìƒíƒœ ì¶œë ¥ 
     printf("\n");
     printf("\n");
     printBoard(board1, boardSize);
     printf("\n\n\n");
     printBoard(board2, boardSize);
 }
+
 
 void gameMode() {
     int n;
@@ -277,21 +288,22 @@ void gameMode() {
         multiPlay(boardSize, shipsCount);
     } else {
         printf("Invaild Select! Try again\n");
-        gameMode(); // Àß¸ø ÀÔ·Â½Ã ´Ù½Ã ¸ğµå ¼±ÅÃÇÏµµ·Ï ÇÔ.
+        gameMode(); // ï¿½ß¸ï¿½ ï¿½Ô·Â½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½.
     }
 }
 
-// º¸µå¸¦ ºó Ä­À¸·Î ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
-void initializeBoard(char board[][boardSize], int boardSize) { // ¸ğµÎ '~'·Î Ãâ·ÂÇÔÇÔ
+// ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ Ä­ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+void initializeBoard(char board[][boardSize], int boardSize) { // ï¿½ï¿½ï¿½ '~'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int i, j;
     for (i = 0; i < boardSize; i++) {
         for (j = 0; j < boardSize; j++) {
-            board[i][j] = '~'; // '~'´Â ºó Ä­À» ³ªÅ¸³¿
+            board[i][j] = '~'; // '~'ï¿½ï¿½ ï¿½ï¿½ Ä­ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
         }
     }
 }
 
-// ÀüÇÔ À§Ä¡¸¦ °¨Ãß°í º¸µå¸¦ Ãâ·ÂÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ß°ï¿½ ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+
 void printBoard(char board[][boardSize], int boardSize) {
     int i, j;
     for (i = 0; i < boardSize; i++) {
@@ -302,7 +314,7 @@ void printBoard(char board[][boardSize], int boardSize) {
                 printf("%c ", cell);
                 printf("\033[0;37m");
             } else if (cell == 'H') {
-                printf("\033[0;33m"); // ³ë¶õ»ö
+                printf("\033[0;33m"); // ï¿½ï¿½ï¿½ï¿½ï¿½
                 printf("%c ", cell);
                 printf("\033[0;37m");
             } else if (cell == 'O') {
@@ -323,93 +335,100 @@ void printBoard(char board[][boardSize], int boardSize) {
     }
 }
 
-// ÀüÇÔÀ» º¸µå¿¡ ¹èÄ¡ÇÏ´Â ÇÔ¼ö
+
+// ì „í•¨ì„ ë³´ë“œì— ë°°ì¹˜í•˜ëŠ” í•¨ìˆ˜
+
 void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
     int i;
     for (i = 0; i < shipsCount; i++) {
         int row, col;
         printf("Enter the coordinates for Ship %d(row column): ", i + 1);
-        int result = scanf("%d %d", &row, &col); // 2°³ÀÇ Á¤¼ö¸¦ ÀÔ·Â¹Ş¾Æ¼­ result¿¡ ÀúÀå
-        if (result == 2) { // 2°³ÀÇ Á¤¼ö°¡ ÀÔ·ÂµÇ¾úÀ» ¶§¸¸ ½ÇÇà
-            if (getchar() != '\n') { // 2°³ÀÇ Á¤¼ö ÀÌÈÄ¿¡ Ãß°¡ ¹®ÀÚ°¡ ¹öÆÛ¿¡ ³²¾ÆÀÖ´Ù¸é
+
+        int result = scanf("%d %d", &row, &col); // 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·Â¹Ş¾Æ¼ï¿½ resultï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        if (result == 2) { // 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ÂµÇ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            if (getchar() != '\n') { // 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´Ù¸ï¿½
                 printf("Too many inputs. Only enter two numbers. Try again\n");
-                while (getchar() != '\n'); // ¹öÆÛ¿¡ ³²Àº ¸ğµç ¹®ÀÚ¸¦ ¹ö¸®¸ç '\n'¸¦ ¸¸³¯ ¶§±îÁö ¹İº¹
-                i--; // i¸¦ °¨¼Ò½ÃÄÑ ÀÌ¹ø ÀÔ·ÂÀ» ¹«È¿È­ÇÏ°í, ÀÔ·ÂÀ» ´Ù½Ã ¹Şµµ·Ï ÇÔ
-                continue; // for ·çÇÁÀÇ Ã³À½À¸·Î µ¹¾Æ°¡ Àç½ÃÀÛ
+                while (getchar() != '\n'); // ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ '\n'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½İºï¿½
+                i--; // iï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½È¿È­ï¿½Ï°ï¿½, ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Şµï¿½ï¿½ï¿½ ï¿½ï¿½
+                continue; // for ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
             }
 
             if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
                 if (board[row][col] != '~') {
                     printf("There is already a ship at that location. Try again\n");
-                    i--; // Àß¸øµÈ À§Ä¡ ÀÔ·Â ½Ã ´Ù½Ã ÀÔ·Â
+                    i--; // ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ô·ï¿½ ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ô·ï¿½
+
                 } else {
                     board[row][col] = 'S';
                 }
             } else {
+
                 printf("Invalid coordinates. Try again\n");
-                i--; // ¹üÀ§ ¹Û ÁÂÇ¥ ÀÔ·Â ½Ã ´Ù½Ã ÀÔ·Â
+                i--; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½Ô·ï¿½ ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ô·ï¿½
             }
-        } else { // ÀÔ·Â¹ŞÀº µ¥ÀÌÅÍ°¡ 2°³ÀÇ Á¤¼ö°¡ ¾Æ´Ï¶ó¸é
+        } else { // ï¿½Ô·Â¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ï¿½
             printf("Invalid input. You need to enter only two numbers. Try again\n");
-            while (getchar() != '\n'); // ¹öÆÛ¿¡ ³²Àº ¸ğµç ¹®ÀÚ¸¦ ¹ö¸®¸ç '\n'¸¦ ¸¸³¯ ¶§±îÁö ¹İº¹
-            i--; // i¸¦ °¨¼Ò½ÃÄÑ ÀÌ¹ø ÀÔ·ÂÀ» ¹«È¿È­ÇÏ°í, ÀÔ·ÂÀ» ´Ù½Ã ¹Şµµ·Ï ÇÔ
+            while (getchar() != '\n'); // ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ '\n'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½İºï¿½
+            i--; // iï¿½ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½È¿È­ï¿½Ï°ï¿½, ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Şµï¿½ï¿½ï¿½ ï¿½ï¿½
         }
     }
 }
 
-// ÀüÇÔÀ» º¸µå¿¡ ·£´ıÀ¸·Î ¹èÄ¡ÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½å¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 void placeShipsRandom(char board[][boardSize], int boardSize, int shipsCount) {
     int i;
-    srand(time(0)); // ½Ãµå ¼³Á¤: rand() ÇÔ¼ö¸¦ ÅëÇÑ ·£´ı °ªÀ» »ı¼ºÇÏ±â À§ÇØ ÇöÀç ½Ã°£À» ½Ãµå·Î »ç¿ë
+    srand(time(0)); // ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½: rand() ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Ãµï¿½ï¿½ ï¿½ï¿½ï¿½
 
     for (i = 0; i < shipsCount; i++) {
         int row, col;
         do {
-            row = rand() % boardSize; // 0ºÎÅÍ boardSize-1 »çÀÌÀÇ ·£´ı Çà °ª »ı¼º
-            col = rand() % boardSize; // 0ºÎÅÍ boardSize-1 »çÀÌÀÇ ·£´ı ¿­ °ª »ı¼º
-        } while (board[row][col] != '~'); // ¹è°¡ ÀÌ¹Ì ÀÖ´ÂÁö È®ÀÎÇÏ°í, ºó ÀÚ¸®(~)ÀÏ ¶§±îÁö ¹İº¹
-        board[row][col] = 'S'; // ¹è ¹èÄ¡
+            row = rand() % boardSize; // 0ï¿½ï¿½ï¿½ï¿½ boardSize-1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            col = rand() % boardSize; // 0ï¿½ï¿½ï¿½ï¿½ boardSize-1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        } while (board[row][col] != '~'); // ï¿½è°¡ ï¿½Ì¹ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½ï¿½ ï¿½Ú¸ï¿½(~)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½İºï¿½
+        board[row][col] = 'S'; // ï¿½ï¿½ ï¿½ï¿½Ä¡
     }
 }
 
-// À¯È¿ÇÑ ÃßÃøÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 int isValidGuess(int row, int col, int boardSize) {
-    return (row >= 0 && row < boardSize && col >= 0 && col < boardSize); // º¸µå »çÀÌÁî ¾È¿¡ ÀÖÀ¸¸é T¸®ÅÏ ¾Æ´Ï¸é F¸®ÅÏ
+    return (row >= 0 && row < boardSize && col >= 0 && col < boardSize); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Tï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ Fï¿½ï¿½ï¿½ï¿½
 }
 
-// ¸ğµç ÀüÇÔÀÌ °İÃßµÇ¾ú´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ßµÇ¾ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+
 int hasWon(char board[][boardSize], int boardSize) {
     int i, j;
     for (i = 0; i < boardSize; i++) {
         for (j = 0; j < boardSize; j++) {
             if (board[i][j] == 'S' || board[i][j] == 'H') {
-                return 0; // ¾ÆÁ÷ °İÃßµÇÁö ¾ÊÀº ÀüÇÔÀÌ ÇÏ³ª ÀÌ»ó ³²¾ÆÀÖÀ½
+                return 0; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             }
         }
     }
-    return 1; // ¸ğµç ÀüÇÔÀÌ °İÃßµÊ
+    return 1; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ßµï¿½
+
 }
 
-// Easy ¸ğµå ÇÃ·¹ÀÌ¾î Á¤º¸ ÀÔ·Â ÇÔ¼ö
+// Easy ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ô¼ï¿½
 void rank_input_E(int attempt) {
     char player_name[50];
 
     printf("Game Over. Enter name: ");
     scanf("%s", player_name);
 
-    // ¸Ş¸ğÀå ¿­±â
+    // ï¿½Ş¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     FILE* file = fopen("Rank_list_E.txt", "a");
     if (file == NULL) {
         printf("File open error\n");
         return;
     }
 
-    // ÀÌ¸§°ú Á¡¼ö ÆÄÀÏ¿¡ ÀÔ·Â
+    // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½Ô·ï¿½
     fprintf(file, "Player Name: %s\tattempt: %d\n", player_name, attempt);
     fclose(file);
 }
 
-// Easy ¸ğµå ÇÃ·¹ÀÌ¾î Á¤º¸ ÆÄÀÏ¿¡¼­ ÀĞ±â
+// Easy ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½Ğ±ï¿½
 int read_attempt_E(Player players[], int max_players) {
     FILE* file = fopen("Rank_list_E.txt", "r");
     if (file == NULL) {
@@ -418,7 +437,7 @@ int read_attempt_E(Player players[], int max_players) {
     }
 
     int count = 0;
-    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanfÀÇ ¹İÈ¯°ªÀÌ 2ÀÌ¸é 2°¡Áö °ª ¸ğµÎ Àß °¡Á®¿Ô´Ü ÀÇ¹Ì 
+    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanfï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ 2ï¿½Ì¸ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ ï¿½Ç¹ï¿½ 
         count++;
         if (count >= max_players) {
             break;
@@ -429,26 +448,26 @@ int read_attempt_E(Player players[], int max_players) {
     return count;
 }
 
-// Hard ¸ğµå ÇÃ·¹ÀÌ¾î Á¤º¸ ÀÔ·Â ÇÔ¼ö
+// Hard ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ô¼ï¿½
 void rank_input_H(int attempt) {
     char player_name[50];
 
     printf("Game Over. Enter name: ");
     scanf("%s", player_name);
 
-    // ¸Ş¸ğÀå ¿­±â
+    // ï¿½Ş¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     FILE* file = fopen("Rank_list_H.txt", "a");
     if (file == NULL) {
         printf("File open error\n");
         return;
     }
 
-    // ÀÌ¸§°ú Á¡¼ö ÆÄÀÏ¿¡ ÀÔ·Â
+    // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½Ô·ï¿½
     fprintf(file, "Player Name: %s\tattempt: %d\n", player_name, attempt);
     fclose(file);
 }
 
-// ÇÃ·¹ÀÌ¾î Á¤º¸ ÆÄÀÏ¿¡¼­ ÀĞ±â
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½Ğ±ï¿½
 int read_attempt_H(Player players[], int max_players) {
     FILE* file = fopen("Rank_list_H.txt", "r");
     if (file == NULL) {
@@ -457,7 +476,8 @@ int read_attempt_H(Player players[], int max_players) {
     }
 
     int count = 0;
-    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanfÀÇ ¹İÈ¯°ªÀÌ 2ÀÌ¸é 2°¡Áö °ª ¸ğµÎ Àß °¡Á®¿Ô´Ü ÀÇ¹Ì 
+
+    while (fscanf(file, "Player Name: %49s\tattempt: %d\n", players[count].name, &players[count].attempt) == 2) { // fscanfï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ 2ï¿½Ì¸ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ ï¿½Ç¹ï¿½ 
         count++;
         if (count >= max_players) {
             break;
@@ -468,14 +488,15 @@ int read_attempt_H(Player players[], int max_players) {
     return count;
 }
 
-// Á¡¼ö¸¦ ±âÁØÀ¸·Î ¿À¸§Â÷¼ø Á¤·ÄÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 int compare_attempt(const void* a, const void* b) {
     Player* playerA = (Player*)a;
     Player* playerB = (Player*)b;
-    return playerA->attempt - playerB->attempt; // ¿À¸§Â÷¼ø Á¤·Ä
+    return playerA->attempt - playerB->attempt; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
-// Á¤·ÄµÈ °á°ú Ãâ·Â ÇÔ¼ö
+
+// ï¿½ï¿½ï¿½Äµï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void print_sorted_attempt(Player players[], int count) {
     int i;
     printf("\n=== Sorted attempt ===\n");
@@ -485,9 +506,11 @@ void print_sorted_attempt(Player players[], int count) {
 }
 
 void showRanking(int boardSize) {
+
     const int MAX_PLAYERS = 100;
     Player players[MAX_PLAYERS];
     int player_count;
+
 
     if (boardSize == 5) {
         player_count = read_attempt_E(players, MAX_PLAYERS);
@@ -495,6 +518,7 @@ void showRanking(int boardSize) {
         player_count = read_attempt_H(players, MAX_PLAYERS);
     }
     
-    qsort(players, player_count, sizeof(Player), compare_attempt); // Á¡¼ö ±âÁØÀ¸·Î Á¤·Ä
-    print_sorted_attempt(players, player_count); // Á¤·ÄµÈ °á°ú Ãâ·Â
+    qsort(players, player_count, sizeof(Player), compare_attempt); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    print_sorted_attempt(players, player_count); // ï¿½ï¿½ï¿½Äµï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 }
+
