@@ -58,7 +58,7 @@ void print_sorted_attempt(Player players[], int count);
 void showRanking(int boardSize);
 
 int main() {
-    gameMode();  // 게임 모드 선택
+    gameMode(); // 게임 모드 선택
     return 0;
 }
 
