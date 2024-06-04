@@ -1,5 +1,6 @@
 #include "GameMode.h"
 
+
 int attempts=0;
 int attempts1=0;
 int attempts2=0;

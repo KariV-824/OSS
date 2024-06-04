@@ -1,6 +1,5 @@
 #include "UiFun.h"
 
-
 // 게임 이름을 출력하는 함수
 void printHeadUI() {
     printf("\033[0;37m");

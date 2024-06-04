@@ -1,7 +1,6 @@
 #include "RankingFun.h"
 #include <stdlib.h>
 
-
 // Easy모드의 랭킹표 입력 함수
 void rank_input_E(int attempt) {
     char player_name[50];
