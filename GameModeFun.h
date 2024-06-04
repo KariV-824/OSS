@@ -5,7 +5,7 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "PlaceShipFun.h"
+#include "GamePlayFun.h"
 #include "RankingFun.h"
 #include "UiFun.h"
 
