@@ -172,7 +172,11 @@ void singlePlay(int boardSize, int shipsCount) {
     while (!hasWon(board, boardSize)) {  // 보드에 배가 남아있지 않을 때까지
         processGuess(board, boardSize, 0); // 배의 위치를 추측
         attempts++; 
+<<<<<<< HEAD
         printSingleTailUI(attempts, remainShips1, findShipcnt1); // 한번 추측할때마다 TailUI 출력
+=======
+        printTailUI(attempts, remainShips1, findShipcnt1);
+>>>>>>> 3bf3b9baaa37e1f93975b4ec323705189551059b
     }
 
     time(&end); // 게임 종료 시간 기록
