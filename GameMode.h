@@ -1,6 +1,7 @@
 #ifndef __GAMEMODE_H__
 #define __GAMEMODE_H__
 
+
 #include <stdio.h>
 #include <time.h>
 #include <stdio.h>

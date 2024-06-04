@@ -2,6 +2,7 @@
 #define __PLACESHIPFUN_H__
 #include "GameMode.h"
 
+
 int boardSize;
 int shipsCount;
 int remainShips1;

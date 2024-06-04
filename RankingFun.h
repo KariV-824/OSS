@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 #include "GameMode.h"
 typedef struct { // 플레이어 정보 구조체 정의
     char name[50];

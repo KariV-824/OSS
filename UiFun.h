@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <mmsystem.h>
 
+
 // 비프음 재생을 위한 음계값 정의
 #define _C 1046.502
 #define _D 1108.731

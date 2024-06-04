@@ -1,5 +1,6 @@
 #include "PlaceshipFun.h"
 
+
 int remainShips1=0;
 int remainShips2=0;
 int findShipcnt1=0;
