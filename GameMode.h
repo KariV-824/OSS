@@ -16,8 +16,12 @@
 
 
 extern int attempts;
+extern int attempts1;
+extern int attempts2;
+
 extern int boardSize;
 extern int shipsCount;
+
 extern int remainShips1;
 extern int remainShips2;
 extern int findShipcnt1;

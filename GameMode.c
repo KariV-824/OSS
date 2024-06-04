@@ -2,6 +2,8 @@
 
 
 int attempts=0;
+int attempts1=0;
+int attempts2=0;
 int boardSize=0;
 int shipsCount=0;
 
@@ -12,7 +14,7 @@ void selectDifficulty(int *boardSize, int *shipsCount) {
     printf("Select Difficulty\n");
     printf("1: Easy  2: Hard  -->  ");
     scanf("%d", &difficulty);
-    while (getchar() != '\n');  // 입력 버퍼 비우기
+    while (getchar() != '\n'); 
 
     if (difficulty == 1) {
         *boardSize = EASY_BOARD_SIZE;
@@ -34,92 +36,104 @@ void singlePlay(int boardSize, int shipsCount) {
     char board[boardSize][boardSize];
     int guessRow, guessCol;
     int a = 0;
-    time_t start, end; // 시간 측정을 위한 변수
+    time_t start, end; 
 
-    initializeBoard(board, boardSize); // 초기화
-    placeShipsRandom(board, boardSize, shipsCount); // 랜덤 배치
+    initializeBoard(board, boardSize); 
+    placeShipsRandom(board, boardSize, shipsCount); 
     printHeadUI();
 
-    time(&start); // 게임 시작 시간 기록
-    // 게임 루프
-    while (!hasWon(board, boardSize)) {  // 보드에 전함이 남아있으면
-        processGuess(board, boardSize, 1);
-        attempts++; //시도 횟수 증가
+    time(&start);
+    
+    while (!hasWon(board, boardSize)) {  
+        processGuess(board, boardSize, 0);
+        attempts++; 
         printTailUI(attempts, remainShips1, findShipcnt1);
     }
 
-    time(&end); // 게임 종료 시간 기록
-    int time_taken = difftime(end, start); // 걸린 시간 계산
+    time(&end);
+    int time_taken = difftime(end, start); 
 
-    // 게임 종료, 최종 보드 상태와 시도 횟수 출력
+
     printf("\n");
     printBoard(board, boardSize);
     printf("Congratulations! All battleships have been shot down. Attempts: %d\n", attempts);
-    printf("Time taken: %d seconds\n", time_taken); // 총 소요 시간 출력
-    
+    printf("Time taken: %d seconds\n", time_taken);
     if (boardSize == 5) {
         rank_input_E(attempts);
     } else {
         rank_input_H(attempts);
-    }
+    } 
 
-    printf("Would you like to check the ranking table?(1: Yes  2: No)  -->  ");
-    scanf("%d", &a);
-    if (a == 1) {
-        showRanking(boardSize);
-    } else if ( a == 2) {
-        return;
+    while (1) {
+        printf("Would you like to check the ranking table?(1: Yes  2: No)  -->  ");
+        scanf("%d", &a);
+        while(getchar() != '\n');
+        if (a == 1) {
+            showRanking(boardSize);
+            break;
+        } else if (a == 2) {
+            return;
+        } else {
+            printf("Invalid Select. Try again!\n");
+        }
     }
 }
 
 void multiPlay(int boardSize, int shipsCount) {
-    char board1[boardSize][boardSize]; // 1플레이어 보드
-    char board2[boardSize][boardSize]; // 2플레이어 보드 
+    char board1[boardSize][boardSize];
+    char board2[boardSize][boardSize];
     int guessRow1, guessCol1;
     int guessRow2, guessCol2;
-    int mode1, mode2; // 각 플레이어의 배치 모드
+    int mode1, mode2; 
 
-    // 플레이어 1의 배치 모드 선택
-    printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  -->  ");
-    scanf("%d", &mode1);
-    initializeBoard(board1, boardSize);
+    while (1) {
+        printf("Player 1: Choose ship placement mode(1: Manual  2: Random)  -->  ");
+        scanf("%d", &mode1);
+        while(getchar() != '\n');
 
-    if (mode1 == 1) {
-        placeShips(board1, boardSize, shipsCount);
-    } else if (mode1 == 2) {
-        placeShipsRandom(board1, boardSize, shipsCount);
-    } else {
-        printf("Invalid input value!\n");
-        multiPlay(boardSize, shipsCount);
+        initializeBoard(board1, boardSize);
+
+        if (mode1 == 1) {
+            placeShips(board1, boardSize, shipsCount);
+            break;
+        } else if (mode1 == 2) {
+            placeShipsRandom(board1, boardSize, shipsCount);
+            break;
+        } else {
+            printf("Invalid input value! Please try again!\n");
+        }
     }
 
-    // 플레이어 2의 배치 모드 선택
-    printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  -->  ");
-    scanf("%d", &mode2);
-    initializeBoard(board2, boardSize);
+    while (1) {
+        printf("Player 2: Choose ship placement mode(1: Manual  2: Random)  -->  ");
+        scanf("%d", &mode2);
+        while(getchar() != '\n'); 
 
-    if (mode2 == 1) {
-        placeShips(board2, boardSize, shipsCount);
-    } else if (mode2 == 2) {
-        placeShipsRandom(board2, boardSize, shipsCount);
-    } else {
-        printf("Invalid input value!\n");
-        multiPlay(boardSize, shipsCount);       
+        initializeBoard(board2, boardSize);
+
+        if (mode2 == 1) {
+            placeShips(board2, boardSize, shipsCount);
+            break;
+        } else if (mode2 == 2) {
+            placeShipsRandom(board2, boardSize, shipsCount);
+            break;
+        } else {
+            printf("Invalid input value! Please try again!\n");
+        }
     }
 
-    // 게임 설명 출력
-    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("@     BATTLESHIP GAME!     @\n");
-    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-    printf("Guess the location of the battleship on the board\n");
+    printHeadUI();
+    printf("Guess the location of the battleship on the board!\n");
     printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
 
     int turn = 1;
-    // 게임 루프
-    while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {  // 보드에 전함이 남아있으면
+
+    while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {
         if (turn == 1) {
             printf("Player 1's turn: \n");
             processGuess(board1, boardSize, 1);
+            attempts1++; 
+            printMultiUI(attempts1, attempts2, remainShips1, remainShips2, findShipcnt1, findShipcnt2);
             if (hasWon(board1, boardSize)) {
                 printf("Player 1 wins!\n");
                 break;
@@ -128,6 +142,8 @@ void multiPlay(int boardSize, int shipsCount) {
         } else {
             printf("Player 2's turn: \n");
             processGuess(board2, boardSize, 2);
+            attempts2++; 
+            printMultiUI(attempts1, attempts2, remainShips1, remainShips2, findShipcnt1, findShipcnt2);
             if (hasWon(board2, boardSize)) {
                 printf("Player 2 wins!\n");
                 break;
@@ -135,8 +151,7 @@ void multiPlay(int boardSize, int shipsCount) {
             turn = 1;
         }
     }
-
-    // 게임 종료, 최종 보드 상태 출력 
+ 
     printf("\n");
     printf("\n");
     printBoard(board1, boardSize);
@@ -150,6 +165,7 @@ void gameMode() {
     printf("Select Mode\n");
     printf("1: SinglePlay  2: MultiPlay  -->  ");
     scanf("%d", &n);
+    while(getchar() != '\n');
 
     if (n == 1) {
         selectDifficulty(&boardSize, &shipsCount);
@@ -158,7 +174,7 @@ void gameMode() {
         selectDifficulty(&boardSize, &shipsCount);
         multiPlay(boardSize, shipsCount);
     } else {
-        printf("Invaild Select! Try again\n");
-        gameMode(); // 잘못 입력시 다시 모드 선택하도록 함.
+        printf("Invalid Select. Try again!\n");
+        gameMode();
     }
 }
