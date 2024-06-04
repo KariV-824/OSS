@@ -1,4 +1,4 @@
-#include "GameMode.h"
+#include "GameModeFun.h"
 
 
 int attempts=0;

@@ -1,4 +1,4 @@
-#include "PlaceshipFun.h"
+#include "GamePlayFun.h"
 
 int remainShips1=0;
 int remainShips2=0;

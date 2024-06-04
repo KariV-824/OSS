@@ -1,4 +1,4 @@
-#include "GameMode.h"
+#include "GameModeFun.h"
 
 int main() {
     gameMode(); // 게임 모드 설정

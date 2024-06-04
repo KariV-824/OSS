@@ -1,6 +1,6 @@
-#ifndef __PLACESHIPFUN_H__
-#define __PLACESHIPFUN_H__
-#include "GameMode.h"
+#ifndef __GAMEPLAYFUN_H__
+#define __GAMEPLAYFUN_H__
+#include "GameModeFun.h"
 
 int boardSize;
 int shipsCount;
