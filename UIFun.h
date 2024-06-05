@@ -1,5 +1,6 @@
 #ifndef __UIFUN_H__
 #define __UIFUN_H__
+
 #include "GameModeFun.h"
 #pragma comment (lib, "winmm.lib")
 #include <Windows.h>
