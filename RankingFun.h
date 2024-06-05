@@ -1,5 +1,6 @@
 #ifndef __RANKINGFUN_H__
 #define __RANKINGFUN_H__
+
 #include <string.h>
 #include <stdlib.h>
 
