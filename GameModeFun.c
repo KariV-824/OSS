@@ -1,12 +1,10 @@
 #include "GameModeFun.h"
 
-
-int attempts=0;
-int attempts1=0;
-int attempts2=0;
-int boardSize=0;
-int shipsCount=0;
-
+int boardSize = 0;
+int shipsCount = 0;
+int attempts = 0;
+int attempts1 = 0;
+int attempts2 = 0;
 
 // 게임 난이도를 선택하는 함수
 void selectDifficulty(int *boardSize, int *shipsCount) {
@@ -128,8 +126,7 @@ void multiPlay(int boardSize, int shipsCount) {
     printf("Guess the location of the battleship on the board!\n");
     printf("Enter row and column numbers from 0 to %d\n", boardSize - 1);
 
-    int turn = 1;
-
+    int turn = 1;    
     while (!hasWon(board1, boardSize) && !hasWon(board2, boardSize)) {  // 두 보드 중 어느 한쪽에서도 승리 조건이 만족되지 않을 때까지
         if (turn == 1) {
             printf("Player 1's turn: \n");
@@ -153,7 +150,6 @@ void multiPlay(int boardSize, int shipsCount) {
             turn = 1;
         }
     }
- 
     printf("\n");
     printf("\n");
     printBoard(board1, boardSize); // 보드판1 출력
