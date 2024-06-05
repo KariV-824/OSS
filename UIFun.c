@@ -1,4 +1,4 @@
-#include "UiFun.h"
+#include "UIFun.h"
 
 // 게임 이름을 출력하는 함수
 void printHeadUI() {
