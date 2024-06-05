@@ -61,7 +61,6 @@ void placeShips(char board[][boardSize], int boardSize, int shipsCount) {
                 i--; // 이번 입력을 무효화하고, 입력을 다시 받도록 함
                 continue; 
             }
-
             if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
                 if (board[row][col] != '~') {
                     printf("There is already a ship at that location. Try again!\n");
@@ -113,8 +112,6 @@ int hasWon(char board[][boardSize], int boardSize) {
     }
     return 1; // 보드판에 배가 없다면 1을 반환(승리)
 }
-
-
 
 // Player의 추측을 처리하는 함수
 void processGuess(char board[][boardSize], int boardSize, int player) {
