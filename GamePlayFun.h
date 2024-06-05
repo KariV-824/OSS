@@ -1,5 +1,6 @@
 #ifndef __GAMEPLAYFUN_H__
 #define __GAMEPLAYFUN_H__
+
 #include "GameModeFun.h"
 
 int boardSize;
