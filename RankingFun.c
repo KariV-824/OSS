@@ -8,7 +8,6 @@ void rank_input_E(int attempt) {
     printf("Game Over. Enter name: ");
     scanf("%s", player_name);
 
-
     FILE* file = fopen("Rank_list_E.txt", "a"); // Rank_list_E.txt를 쓰기 전용으로 open
     if (file == NULL) {
         printf("File open error\n");
